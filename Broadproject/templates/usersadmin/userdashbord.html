@@ -1,0 +1,194 @@
+<!-- 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - User Management</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: "Lato", sans-serif;
+            background-color: #f0f4f7;
+        }
+        .sidenav {
+            height: 100%;
+            width: 250px; /* Fixed width for the sidenav */
+            position: fixed; /* Keep it fixed in full screen */
+            z-index: 1;
+            top: 0;
+            left: 0;
+            background-color: #000; /* Black background */
+            padding-top: 20px;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+        }
+        .sidenav a {
+            padding: 15px 20px;
+            text-decoration: none;
+            font-size: 18px;
+            color: #fff; /* White text */
+            display: block;
+            transition: 0.3s;
+        }
+        .sidenav a:hover {
+            background-color: #444; /* Slightly lighter black on hover */
+            color: #fff;
+        }
+        .main {
+            margin-left: 250px; /* Leave space for sidenav */
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            transition: margin-left 0.3s; /* Smooth transition for margin change */
+        }
+
+        @media (max-width: 992px) {
+            .sidenav {
+                width: 100%;
+                height: auto;
+                position: relative;
+                box-shadow: none;
+            }
+            .sidenav a {
+                text-align: center;
+                float: none;
+            }
+            .main {
+                margin-left: 0; /* Full width for main content in mobile */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#sidenavCollapse" aria-controls="sidenavCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <a class="navbar-brand" href="#">User Management</a>
+        </div>
+    </nav>
+
+    <div class="sidenav collapse" id="sidenavCollapse">
+        <h5 class="text-center text-white">User Management</h5>
+        <a href="{% url 'userdashboard' %}"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+        <a href="{% url 'userinfo' %}"><i class="fas fa-users"></i> Users</a>
+        <a href="{% url 'home' %}"><i class="fas fa-sign-out-alt"></i> Admin Area</a>
+    </div>
+
+    <div class="main">
+        <h2>Welcome to User Management</h2>
+        <p>Manage users, view stats, and more.</p>
+        
+        <div class="card text-white bg-info mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Total Users</h5>
+                <p class="card-text">{{totalusers}}</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - User Management</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: "Lato", sans-serif;
+            background-color: #f0f4f7;
+        }
+        .sidenav {
+            height: 100%;
+            width: 250px; /* Fixed width for the sidenav */
+            position: fixed; /* Keep it fixed in full screen */
+            z-index: 1;
+            top: 0;
+            left: 0;
+            background-color: #000; /* Black background */
+            padding-top: 20px;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease; /* Transition for toggling */
+        }
+        .sidenav a {
+            padding: 15px 20px;
+            text-decoration: none;
+            font-size: 18px;
+            color: #fff; /* White text */
+            display: block;
+            transition: 0.3s;
+        }
+        .sidenav a:hover {
+            background-color: #444; /* Slightly lighter black on hover */
+            color: #fff;
+        }
+        .main {
+            margin-left: 250px; /* Leave space for sidenav */
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            transition: margin-left 0.3s; /* Smooth transition for margin change */
+        }
+
+        @media (max-width: 992px) {
+            .sidenav {
+                width: 100%;
+                height: auto;
+                position: relative;
+                box-shadow: none;
+            }
+            .sidenav a {
+                text-align: center;
+                float: none;
+            }
+            .main {
+                margin-left: 0; /* Full width for main content in mobile */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#sidenavCollapse" aria-controls="sidenavCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <a class="navbar-brand" href="#">User Management</a>
+        </div>
+    </nav>
+
+    <div class="sidenav collapse d-lg-block" id="sidenavCollapse">
+        <h5 class="text-center text-white">User Management</h5>
+        <a href="{% url 'userdashboard' %}"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+        <a href="{% url 'userinfo' %}"><i class="fas fa-users"></i> Users</a>
+        <a href="#"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    </div>
+
+    <div class="main">
+        <h2>Welcome to User Management</h2>
+        <p>Manage users, view stats, and more.</p>
+        
+        <div class="card text-white bg-info mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Total Users</h5>
+                <p class="card-text">{{totalusers}}</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+

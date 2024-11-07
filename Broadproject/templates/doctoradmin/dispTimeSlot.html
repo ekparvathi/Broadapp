@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://kit.fontawesome.com/e4ecc635a0.js" crossorigin="anonymous"></script>
+    {% load static %}
+
+
+<style>
+    body {
+        font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        font-size: small;
+        color: rgb(33, 102, 126);
+        margin: 0;
+    }
+    #hdiv {
+        max-width: 600px;
+        margin: auto;
+        border: 2px solid rgb(168, 104, 19);
+        border-radius: 3px;
+        box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.3);
+        padding: 20px;
+    }
+    #head {
+        background-color: brown;
+        padding: 10px;
+        color: white;
+        text-align: center;
+        border-radius: 3px;
+    }
+    .form-group {
+        display: flex;
+        align-items: center;
+        margin-bottom: 15px;
+    }
+    .form-group label {
+        width: 150px;
+        margin-right: 10px;
+    }
+    .form-group input,
+    .form-group select {
+        flex-grow: 1;
+        height: 30px;
+        width: 200px;
+    }
+    #actionLinks {
+        margin: 20px 0;
+    }
+    #actionLinks a,
+    .button {
+        background-color: rgb(244, 222, 222);
+        border: 1px solid rgb(189, 79, 79);
+        border-radius: 5px;
+        padding: 5px 10px;
+        color: rgb(33, 102, 126);
+        text-decoration: none;
+        text-align: center;
+        display: inline-block;
+        font-size: medium;
+        font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        transition: background-color 0.3s, color 0.3s;
+    }
+    #actionLinks a:hover,
+    .button:hover {
+        color: rgb(189, 79, 79);
+    }
+    #timeSlots {
+        margin-top: 20px;
+    }
+    #timeSlots table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    #timeSlots th,
+    #timeSlots td {
+        border: 1px solid #ddd;
+        padding: 8px;
+    }
+    #timeSlots th {
+        background-color: rgb(189, 79, 79);
+        color: white;
+    }
+    #timeSlots tr:nth-child(even) {
+        background-color: rgb(244, 222, 222);
+        color: rgb(33, 102, 126);
+    }
+    #timeSlots tr:nth-child(odd) {
+        color: rgb(33, 102, 126);
+    }
+    #timeSlots tr:hover {
+        background-color: #ddd;
+    }
+    #toggle-sidenav {
+            font-size: 24px;
+            margin: 16px;
+            cursor: pointer;
+            position: absolute;
+        }
+        .sidenav {
+            width: 250px;
+            height: 100vh;
+            background-color: #333;
+            color: white;
+            position: fixed;
+            left: -250px; /* Initially hidden */
+            transition: left 0.3s;
+            z-index: 1000;
+            top:0;        }
+        .sidenav.open {
+            left: 0; /* Show the sidenav */
+        }
+        .sidenav h2 {
+            color: #fff;
+        }
+        .sidenav a {
+            color: white;
+            text-decoration: none;
+            display: block;
+            padding: 10px;
+        }
+        .sidenav a:hover {
+            background-color: #575757;
+        }
+    .main-content {
+        margin-left: 260px; /* Space for the sidenav */
+        padding: 20px;
+        color: rgb(33, 102, 126);
+    }
+    #message{
+        margin-left: 300px;
+        color: rgb(33, 102, 126);
+    }
+    @media (max-width: 768px) {
+        .sidenav {
+            left: -250px; /* Hide offscreen */
+        }
+        .sidenav.open {
+            left: 0; /* Show when opened */
+        }
+        .main-content {
+            margin-left: 0; /* No space for sidenav */
+            padding: 20px;
+            margin-top: 40px;
+        }
+    }
+    @media (min-width: 768px) {
+        #toggle-sidenav {
+            display: none; /* Hide button on larger screens */
+        }
+        .sidenav {
+            left: 0; /* Show sidenav on larger screens */
+        }
+        .main-content{
+            margin-left: 260px;
+        }
+    }
+</style>
+</head>
+<body>
+    <button id="toggle-sidenav" aria-label="Toggle navigation">☰</button>
+    <div id="sidenav" class="sidenav ">
+    <h2>Broadway Admin</h2><hr/>
+    <a href="{% url 'doctorss' %}"><i class="fa-solid fa-user-doctor"></i>&nbsp; Doctors</a>
+    <a href="{% url 'hospitals' %}"><i class="fa-solid fa-hospital"></i>&nbsp; Hospitals</a>
+    <a href="{% url 'specializations' %}"><i class="fa-solid fa-clinic-medical"></i>&nbsp; Departments</a>
+    <a href="{% url 'timeslots' %}"><i class="fa-solid fa-clock"></i>&nbsp; Timeslots</a>
+    <a href="{% url 'appointments' %}"><i class="fa-solid fa-calendar-check"></i>&nbsp; Appointments</a>
+    <a href="{% url 'reminders' %}"><i class="fa-solid fa-bell"></i>&nbsp; Reminders</a><hr/>
+    <a href="{% url 'adminlogin' %}"><i class="fa-solid fa-sign-out-alt"></i>&nbsp;Logout</a><hr/>
+    <button id="close-sidenav" style="background: none; border: none; color: white; font-size: 24px; cursor: pointer;" aria-label="Close navigation">✖</button>
+    </div><br/>
+<div class="container-fluid main-content">
+    <div id="hdiv">
+        <div id="head"><label>Display TimeSlots</label></div><br/>
+        <form method="POST" enctype="multipart/form-data">       
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="selectDoc">Doctor:</label>
+                <select name="selectDoc" id="selectDoc" class="filter-selectbox" required>
+                    <option value="" disabled selected>Select a Doctor</option>
+                    {% for d in doc %}
+                        <option value="{{ d.id }}" {% if submitted_data.select_field == d.id %}selected{% endif %}>{{ d.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="slotDate">Date:</label>
+                <input type="date" id="slotDate" name="slotDate" required>
+            </div>
+            <div id="actionLinks">
+                <button class="button" type="submit">View</button>
+                <a class="button" href="{% url 'timeslots' %}">Back</a>
+            </div>
+        </form>
+
+        <!-- Display time slots if available -->
+        {% if slots %}
+        <div id="timeSlots">
+            <h2>Available Time Slots</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Start Time</th>
+                        <th>End Time</th>
+                        <th>Is Booked</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for slot in slots %}
+                        <tr>
+                            <td>{{ slot.start_time }}</td>
+                            <td>{{ slot.end_time }}</td>
+                            <td>{{ slot.isBooked }}</td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="3">No time slots available.</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        
+            <!-- Pagination controls -->
+            <!-- <div class="pagination">
+                <span class="step-links">
+                    {% if slots.has_previous %}
+                        <a href="?page=1&selectDoc={{ selected_doc }}&slotDate={{ slot_date }}">&laquo; First</a>
+                        <a href="?page={{ slots.previous_page_number }}&selectDoc={{ selected_doc }}&slotDate={{ slot_date }}">Previous</a>
+                    {% endif %}
+        
+                    <span class="current">
+                        Page {{ slots.number }} of {{ slots.paginator.num_pages }}.
+                    </span>
+        
+                    {% if slots.has_next %}
+                        <a href="?page={{ slots.next_page_number }}&selectDoc={{ selected_doc }}&slotDate={{ slot_date }}">Next</a>
+                        <a href="?page={{ slots.paginator.num_pages }}&selectDoc={{ selected_doc }}&slotDate={{ slot_date }}">Last &raquo;</a>
+                    {% endif %}
+                </span>
+            </div> -->
+        </div>
+        
+        
+{% endif %}
+
+</div>
+
+<script>
+    const toggleButton = document.getElementById('toggle-sidenav');
+    const closeButton = document.getElementById('close-sidenav');
+    const sidenav = document.getElementById('sidenav');
+
+    toggleButton.addEventListener('click', () => {
+        sidenav.classList.toggle('open');
+    });
+
+    closeButton.addEventListener('click', () => {
+        sidenav.classList.remove('open');
+    });
+</script>
+    
+</body>
+</html>

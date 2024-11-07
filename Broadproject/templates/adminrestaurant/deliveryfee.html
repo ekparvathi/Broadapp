@@ -1,0 +1,134 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Delivery Fee</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            font-family: "Lato", sans-serif;
+            background-color: #f4f6f9;
+        }
+        .container {
+            margin-top: 50px; /* Adjusted for responsiveness */
+            max-width: 900px; /* Keep max-width for larger screens */
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            margin-right: 20px;
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: green;
+        }
+        .sidenavs {
+            height: 100%;
+            width: 250px;
+            position: fixed;
+            z-index: 1;
+            top: 0;
+            left: 0;
+            background-color: #f6f9fc;
+            padding-top: 20px;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+        }
+        .sidenavs h5 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .sidenavs a {
+            padding: 12px 16px;
+            text-decoration: none;
+            font-size: 18px;
+            color: #333;
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+            transition: background-color 0.3s;
+        }
+        .sidenavs a i {
+            margin-right: 10px;
+        }
+        .sidenavs a:hover {
+            background-color: #d6e9f5;
+            color: #007bff;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .sidenavs {
+                width: 100%;
+                height: auto;
+                position: relative;
+                box-shadow: none;
+            }
+            .sidenavs a {
+                text-align: center;
+                float: none;
+            }
+            
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light d-lg-none">
+        <div class="container-fluid">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#sidenavCollapse" aria-controls="sidenavCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <a class="navbar-brand" href="#">Delivery Fee</a>
+        </div>
+    </nav>
+
+    <!-- Sidenav -->
+    <div class="sidenavs collapse d-lg-block" id="sidenavCollapse">
+        <h5>Manage Your Restaurant</h5>
+
+        <a href="{% url 'restaurantdata' %}"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+        <a href="{% url 'adminrestaurant' %}"><i class="fas fa-utensils"></i> Restaurants</a>
+        <a href="{% url 'getdeliveryfee' %}"><i class="fas fa-dollar-sign"></i> Delivery Fee</a>
+        <a href="{% url 'promotions' %}"><i class="fas fa-tags"></i> Promotions & Discounts</a>
+        <a href="{% url 'totalorder' %}"><i class="fas fa-receipt"></i> Total Orders</a>
+        <a href="{% url 'fullmenu' %}"><i class="fas fa-utensils"></i> Full Menu List</a>
+        <a href="{% url 'categories' %}"><i class="fas fa-folder"></i> Categories</a>
+        <a href="{% url 'revenue_data' %}"><i class="fas fa-database"></i> Revenue Information</a>
+        <a href="{% url 'razorpay_payment' %}"> <i class="fas fa-credit-card"></i>Paid Via razorpay</a>
+
+    </div>
+    <!-- Top Navbar for Mobile -->
+    
+    <div class="container">
+        <h2>Add Delivery Fee Range</h2>
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-info">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+        <form method="POST">
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <div class="form-outline">
+                        <input type="number" name="distance" id="form3Example2" placeholder="Distance Upto (km)" class="form-control" required />
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="form-outline">
+                        <input type="number" name="deliveryfee" id="form3Example2" placeholder="Delivery Fee (₹)" class="form-control" required />
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <button type="submit" class="btn btn-primary btn-block mb-4">ADD</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

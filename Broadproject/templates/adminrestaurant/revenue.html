@@ -1,0 +1,201 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: "Lato", sans-serif;
+            background-color: #f4f6f9;
+        }
+        .container {
+            margin-top: 50px;
+            margin-left: 300px;
+            max-width: 900px;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+        h5 {
+            text-align: center;
+            color: #0fa833;
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        th {
+            background-color: #5cb85c;
+            color: white;
+        }
+        .sidenav {
+            height: 100%;
+            width: 250px;
+            position: fixed;
+            z-index: 1;
+            top: 0;
+            left: 0;
+            background-color: #f6f9fc;
+            padding-top: 20px;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+        }
+        .sidenav h5 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .sidenav a {
+            padding: 12px 16px;
+            text-decoration: none;
+            font-size: 18px;
+            color: #333;
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+            transition: background-color 0.3s;
+        }
+        .sidenav a i {
+            margin-right: 10px;
+        }
+        .sidenav a:hover {
+            background-color: #d6e9f5;
+            color: #007bff;
+        }
+        .main {
+            margin-left: 260px;
+            padding: 16px;
+        }
+        .card-text {
+            color: black;
+        }
+        .card:hover {
+            transform: scale(1.05);
+            background-color: blue;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+        h3{
+            color: #1d31e2; 
+            margin-top: 50px;
+            margin-left: 300px;
+        }
+        @media screen and (max-width: 768px) {
+            .sidenav {
+                width: 100%;
+                height: auto;
+                position: relative;
+                box-shadow: none;
+            }
+            .sidenav a {
+                text-align: center;
+                float: none;
+            }
+            .container {
+                margin-left: 0;
+                width: 100%;
+            }
+            .main {
+                margin-left: 0;
+            }
+            h3 {
+                margin-left: 0;
+                text-align: center;
+            }
+        }
+        @media screen and (max-width: 576px) {
+            .container {
+                padding: 10px;
+            }
+            h5 {
+                font-size: 16px;
+            }
+            .card {
+                margin-bottom: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Toggle button for sidenav on small screens -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light d-lg-none">
+        <div class="container-fluid">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#sidenavCollapse" aria-controls="sidenavCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <a class="navbar-brand" href="#">Restaurant Dashboard</a>
+        </div>
+    </nav>
+
+    <!-- Sidenav -->
+    <div class="sidenav collapse d-lg-block" id="sidenavCollapse">
+        <h5>Manage Your Restaurant</h5>
+
+        <a href="{% url 'restaurantdata' %}"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+        <a href="{% url 'adminrestaurant' %}"><i class="fas fa-utensils"></i> Restaurants</a>
+        <a href="{% url 'getdeliveryfee' %}"><i class="fas fa-dollar-sign"></i> Delivery Fee</a>
+        <a href="{% url 'promotions' %}"><i class="fas fa-tags"></i> Promotions & Discounts</a>
+        <a href="{% url 'totalorder' %}"><i class="fas fa-receipt"></i> Total Orders</a>
+        <a href="{% url 'fullmenu' %}"><i class="fas fa-utensils"></i> Full Menu List</a>
+        <a href="{% url 'categories' %}"><i class="fas fa-folder"></i> Categories</a>
+        <a href="{% url 'revenue_data' %}"><i class="fas fa-database"></i> Revenue Information</a>
+        <a href="{% url 'razorpay_payment' %}"> <i class="fas fa-credit-card"></i>Paid Via razorpay</a>
+
+    </div>
+
+    <!-- Main content -->
+    <h3 class="text-center text-md-start" >Restaurant Management</h3>
+
+    <div class="container">
+        <h2>Calculate Business Revenue</h2>
+
+        <form class="row g-3" action="{% url 'revenue_data' %}" method="GET">
+            <div class="col-md-4">
+                <label for="start_date" class="form-label">Start Date:</label>
+                <input type="date" id="start_date" name="start_date" class="form-control" required>
+            </div>
+            <div class="col-md-4">
+                <label for="end_date" class="form-label">End Date:</label>
+                <input type="date" id="end_date" name="end_date" class="form-control" required>
+            </div>
+            <div class="col-md-4">
+                <label for="payment_method" class="form-label">Payment Method:</label>
+                <select id="payment_method" name="payment_method" class="form-control">
+                    <option value="both">Both</option>
+                    <option value="cash_on_delivery">Cash on Delivery</option>
+                    <option value="online_payment">Online Payment</option>
+                </select>
+            </div>
+            <div class="col-12 text-center">
+                <button type="submit" class="btn btn-success">Calculate</button>
+            </div>
+        </form>
+
+        {% if revenue %}
+            <div class="alert alert-info mt-3">
+                <strong>Start Date:</strong> {{ revenue.start_date }}<br>
+                <strong>End Date:</strong> {{ revenue.end_date }}<br>
+                <strong>Total Orders:</strong> {{ revenue.orders }}<br>
+                <strong>Revenue Generated:</strong> ₹{{ revenue.total_revenue }}
+            </div>
+        {% else %}
+            <div class="alert alert-warning mt-3">
+                No orders found for the given date range.
+            </div>
+        {% endif %}
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

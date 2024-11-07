@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Set Reminder</title>
+    <script src="https://kit.fontawesome.com/e4ecc635a0.js" crossorigin="anonymous"></script>
+    {% load static %}
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            font-size: small;
+            color: rgb(33, 102, 126);
+            margin: 0;
+        }
+        #hdiv {
+            border: 1px brown inset;
+            border-radius: 5px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            background-color: white;
+            min-width: 200px;
+            width: 40%;
+            margin-left: 200px;
+        }
+        #head {
+            background-color: brown;
+            padding: 10px;
+            color: white;  
+            text-align: center;  
+            border-radius: 5px;
+        }
+        #butAll {
+        padding: 5px;
+        margin-right: 5px;
+        background-color: rgb(244, 222, 222);
+        border-radius: 5px;
+        border-color: rgb(189, 79, 79);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); 
+        border-width: 1px;
+        font-size: medium;
+        color: rgb(33, 102, 126);
+    }
+    #butAll a {
+        color: rgb(33, 102, 126);
+        text-decoration: none;
+    }
+        .main-content {
+            padding: 20px;
+            flex-grow: 1;
+        }
+        .form-group label {
+            color: rgb(33, 102, 126);
+        }
+        #toggle-sidenav {
+            font-size: 24px;
+            margin: 16px;
+            cursor: pointer;
+        }
+        .sidenav {
+            width: 250px;
+            height: 100vh;
+            background-color: #333;
+            color: white;
+            position: fixed;
+            left: -250px; /* Initially hidden */
+            transition: left 0.3s;
+            z-index: 1000;
+            top:0;     
+            font-size: small;  
+         }
+        .sidenav.open {
+            left: 0; /* Show the sidenav */
+        }
+        .sidenav h2 {
+            color: #fff;
+        }
+        .sidenav a {
+            color: white;
+            text-decoration: none;
+            display: block;
+            padding: 10px;
+        }
+        .sidenav a:hover {
+            background-color: #575757;
+        }
+        @media (max-width: 768px) {
+        .sidenav {
+            left: -250px;
+        }
+        .sidenav.open {
+            left: 0;
+        }
+        .main-content {
+            margin-left: -210px;
+        }
+        #hdiv {
+            width: 67%; /* Full width on smaller screens */
+        }
+    }
+    @media (min-width: 768px) {
+        #toggle-sidenav {
+            display: none; /* Hide button on larger screens */
+        }
+        .sidenav {
+            left: 0; /* Show sidenav on larger screens */
+        }
+        .main-content{
+            margin-left: 50px;
+        }
+    }
+    </style>
+</head>
+<body>
+    <button id="toggle-sidenav" aria-label="Toggle navigation">☰</button>
+    <div id="sidenav" class="sidenav">
+        <h2>Broadway Admin</h2><hr/>
+        <a href="{% url 'doctorss' %}"><i class="fa-solid fa-user-doctor"></i>&nbsp; Doctors</a>
+        <a href="{% url 'hospitals' %}"><i class="fa-solid fa-hospital"></i>&nbsp; Hospitals</a>
+        <a href="{% url 'specializations' %}"><i class="fa-solid fa-clinic-medical"></i>&nbsp; Departments</a>
+        <a href="{% url 'timeslots' %}"><i class="fa-solid fa-clock"></i>&nbsp; Timeslots</a>
+        <a href="{% url 'appointments' %}"><i class="fa-solid fa-calendar-check"></i>&nbsp; Appointments</a>
+        <a href="{% url 'reminders' %}"><i class="fa-solid fa-bell"></i>&nbsp; Reminders</a><hr/>
+        <a href="{% url 'adminlogin' %}"><i class="fa-solid fa-sign-out-alt"></i>&nbsp; Logout</a><hr/>
+        <button id="close-sidenav" style="background: none; border: none; color: white; font-size: 24px; cursor: pointer;" aria-label="Close navigation">✖</button>
+    </div><br/>
+    <div class="main-content" >
+        <div id="hdiv">
+            <div id="head" class="row"><label>Set Reminder</label></div>  
+            <form method="POST" target="contentFrame" enctype="multipart/form-data">       
+                {% csrf_token %}
+                <div class="form-group row">
+                    <label for="selectAppoint" class="col-md-4 col-form-label">Appointment</label>
+                    <div class="col-md-8">
+                        <select name="selectAppoint" id="selectAppoint" class="form-control" required>
+                            <option value="" disabled selected>Select appointment</option>
+                            {% for app in appoint %}
+                                <option value="{{ app.id }}" {% if submitted_data.select_field == app.id %}selected{% endif %}>{{ app.appPatient }}{{app.time_slot.date}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="remToken" class="col-md-4 col-form-label">Remind at Token</label>
+                    <div class="col-md-8">
+                        <input type="text" id="remToken" name="remToken" class="form-control" required>
+                    </div>
+                </div>
+                <!-- <div class="form-group row">
+                    <label for="apDate" class="col-md-4 col-form-label">Remind For Appointment Date</label>
+                    <div class="col-md-8">
+                        <input type="date" id="apDate" name="apDate" class="form-control" >
+                    </div>
+                </div> -->
+                <div class="form-group row">
+                    <label for="remTime" class="col-md-4 col-form-label">Remind Before (time in minutes)</label>
+                    <div class="col-md-8">
+                        <input type="text" id="remTime" name="remTime" class="form-control" required>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col text-center">
+                        <button id="butAll" type="submit" class="btn btn-primary">Set Reminder</button>
+                        <a id="butAll" href="{% url 'reminders' %}" class="btn btn-secondary">Back</a>
+                    </div>
+                </div>
+            </form>
+            {% if messages %}
+                <div class="alert alert-warning">{{ messages }}</div>
+                <div>{{ rem }}</div>
+            {% endif %}
+        </div>
+    </div>
+
+    <script>
+        const toggleButton = document.getElementById('toggle-sidenav');
+        const closeButton = document.getElementById('close-sidenav');
+        const sidenav = document.getElementById('sidenav');
+
+        toggleButton.addEventListener('click', () => {
+            sidenav.classList.toggle('open');
+        });
+
+        closeButton.addEventListener('click', () => {
+            sidenav.classList.remove('open');
+        });
+    </script>
+</body>
+</html>

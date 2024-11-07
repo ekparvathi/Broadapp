@@ -1,0 +1,157 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Promocodes</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: "Lato", sans-serif;
+            background-color: #f4f4f4;
+        }
+
+        .sidenav {
+            height: 100%; 
+            width: 250px; 
+            position: fixed; 
+            z-index: 1; 
+            top: 0;
+            left: 0;
+            background-color: rgb(245, 250, 252);
+            overflow-x: hidden; 
+            padding-top: 20px;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .sidenav a {
+            padding: 8px 16px;
+            text-decoration: none;
+            font-size: 18px;
+            color: black;
+            display: block;
+            margin-top: 15px;
+        }
+
+        .sidenav a:hover {
+            color: #201de6;
+        }
+
+        .container {
+            max-width: 600px; /* Set a max width */
+            width: 100%; /* Allow full width but limited by max width */
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-left: 260px; /* Adjust for sidenav */
+            margin-top: 20px; /* Space from top */
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+
+        label {
+            margin-bottom: 5px;
+            color: #555;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        input[type="date"],
+        select {
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            width: 100%;
+        }
+        
+
+        #button {
+            padding: 10px;
+            background-color: #5cb85c;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+        }
+
+        #button:hover {
+            background-color: #4cae4c;
+        }
+       
+
+        @media (max-width: 992px) {
+            .sidenav {
+                position: relative;
+                width: 100%;
+                height: auto;
+                box-shadow: none;
+            }
+
+            .container {
+                margin-left: 0; 
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light d-lg-none">
+        <div class="container-fluid">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#sidenavCollapse" aria-controls="sidenavCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <a class="navbar-brand" href="#">Create PromoCodes</a>
+        </div>
+    </nav>
+
+    <div class="sidenav collapse d-lg-block" id="sidenavCollapse">
+        <a href="{% url 'index' %}">Dashboard</a>
+        <a href="{% url 'profile' %}">Profile</a>
+        <a href="{% url 'revenueinfo' %}">Revenue Info</a>
+        <a href="{% url 'addmenu' %}">Add Menu</a>
+        <a href="{% url 'order_list' %}">Orders</a>
+        <a href="{% url 'list_menu_items' %}">Menu List</a>
+        <a href="{% url 'acceptedorder' %}">Accepted Orders</a>
+        <a href="{% url 'canceledorder' %}">Canceled Orders</a>
+        <a href="{% url 'deliveredorder' %}">Delivered Orders</a>
+        <a href="{% url 'paid_through_online' %}">Paid Through Razorpay</a>
+        <a href="{% url 'reviewrating' %}">Reviews & Ratings</a>
+        <a href="{% url 'restaurantlogout' %}">Logout</a>
+    </div>
+
+    <div class="container">
+        <h2>Create Promo Code</h2>
+        <form method="POST">
+            {% csrf_token %}
+            <label for="code">Promo Code:</label>
+            <input type="text" id="code" name="code" required>
+
+            <label for="value">Discount Value:</label>
+            <input type="number" id="value" name="value" required step="0.01">
+
+            <label for="start_date">Start Date:</label>
+            <input type="date" id="start_date" name="start_date" required>
+
+            <label for="end_date">End Date:</label>
+            <input type="date" id="end_date" name="end_date" required>
+
+            <button id="button" type="submit">Create Promo Code</button>
+        </form>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

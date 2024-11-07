@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Display Doctor Details</title>
+    <script src="https://kit.fontawesome.com/e4ecc635a0.js" crossorigin="anonymous"></script>
+
+<style>
+    body {
+        font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        font-size: small;
+        display: flex;
+        margin: 0;
+        padding: 0;
+    }
+    #toggle-sidenav {
+            font-size: 24px;
+            margin: 16px;
+            cursor: pointer;
+            position: absolute;
+        }
+        .sidenav {
+            width: 250px;
+            height: 100vh;
+            background-color: #333;;
+            position: fixed;
+            left: -250px; /* Initially hidden */
+            transition: left 0.3s, opacity 0.3s;
+            z-index: 1000;
+            top:0;        
+        }
+        .sidenav.open {
+            left: 0; /* Show the sidenav */
+            opacity: 1;
+            color: #333;
+            background-color: #fff;
+        }
+        .sidenav h2 {
+            color: #fff;
+        }
+        .sidenav a {
+            color: white;
+            text-decoration: none;
+            display: block;
+            padding: 10px;
+        }
+        .sidenav a:hover {
+            background-color: #575757;
+        }
+        .main-content {
+            margin-left: 20px; /* Space for the sidenav */
+            padding: 20px;
+        }
+    #dispDoc {
+        background-color:white;
+        margin-left: 230px;
+        border: 1px solid brown;
+        box-shadow: 4px 0px 10px rgba(0, 0, 0, 0.3);
+        border-radius: 5px;
+        padding: 10px;
+        width: calc(100% - 150px); /* Full width for responsiveness */
+        max-width: 800px; /* Optional max width */
+    }
+    #docPic {
+        border: 1px solid brown;
+        width: 100px;
+        height: 120px;
+        box-shadow: 4px 4px 20px rgba(0, 0, 0, 0.3);
+    }
+    
+    #docDetail {
+        display: flex;
+        align-items: center;
+        margin-bottom: 15px;
+        flex-wrap: wrap; /* Allow wrapping for responsiveness */
+    }
+    #docDetail h2 {
+        margin: 0 0 5px 10px;
+    }
+    #docCont {
+        display: flex;
+        justify-content: space-between;
+        padding: 5px 0;
+        width: 100%; /* Full width for responsiveness */
+    }
+    #docCont p {
+        margin: 0;
+    }
+    #actionLinks {
+        display: flex;
+        flex-direction: column; /* Stack links vertically */
+        align-items: flex-start; /* Align items to the start */
+    }
+    #actionLinks a {
+        color: rgb(33, 102, 126);
+        text-decoration: none;
+        margin-right: 20px;
+        padding: 10px;
+        border: 1px solid rgb(189, 79, 79);
+        border-radius: 5px;
+        background-color: rgb(244, 222, 222);
+        margin-bottom: 10px; /* Add spacing between buttons */
+        width: 92%; /* Full width for buttons */
+        text-align: center; /* Center text in buttons */
+    }
+    #actionLinks a:hover {
+        text-decoration: underline;
+    }
+    @media (max-width: 768px) {
+            .sidenav {
+                left: -250px; /* Hide offscreen */
+                height: 20px;
+            }
+            .sidenav.open {
+                left: 0; /* Show when opened */
+                background-color: black;
+                color: white;
+                display:grid;
+            }
+            .main-content {
+                margin-left: -250px; /* No space for sidenav */
+                margin-top: 50px;
+            }
+        }
+        @media (min-width: 768px) {
+            #toggle-sidenav {
+                display: none; /* Hide button on larger screens */
+            }
+            .sidenav {
+                left: 0; /* Show sidenav on larger screens */
+            }
+            
+        }
+</style>
+</head>
+<body> 
+    <button id="toggle-sidenav" aria-label="Toggle navigation">☰</button>
+    <div id="sidenav" class="sidenav ">
+        <h2>Broadway Admin</h2><hr/>
+        <a href="{% url 'doctorss' %}"><i class="fa-solid fa-user-doctor"></i>&nbsp; Doctors</a>
+        <a href="{% url 'hospitals' %}"><i class="fa-solid fa-hospital"></i>&nbsp; Hospitals</a>
+        <a href="{% url 'specializations' %}"><i class="fa-solid fa-clinic-medical"></i>&nbsp; Departments</a>
+        <a href="{% url 'timeslots' %}"><i class="fa-solid fa-clock"></i>&nbsp; Timeslots</a>
+        <a href="{% url 'appointments' %}"><i class="fa-solid fa-calendar-check"></i>&nbsp; Appointments</a>
+        <a href="{% url 'reminders' %}"><i class="fa-solid fa-bell"></i>&nbsp; Reminders</a><hr/>
+        <a href="{% url 'adminlogin' %}"><i class="fa-solid fa-sign-out-alt"></i>&nbsp;Logout</a><hr/>
+        <button id="close-sidenav" style="background: none; border: none; color: white; font-size: 24px; cursor: pointer;" aria-label="Close navigation">✖</button>
+    </div>   
+<div class="main-content">
+    <div id="dispDoc" class="container-fluid">
+        <div class="row" id="docDetail">            
+            <div class="col-md-4">
+                <img id="docPic" src="{{ doc.profile_pic.url }}" alt="{{ doc.name }}">
+            </div>
+            <div class="col-md-8">
+                <h2>{{ doc.name }}</h2>
+                <h6>&nbsp;{{ doc.descri }}</h6>
+            </div>            
+        </div>
+        <hr/>
+        <div class="row">
+            <div id="docCont">
+                <p>Qualification:</p>
+                <p>{{ doc.qualification }}</p>
+            </div>
+            <div id="docCont">
+                <p>Hospital:</p>
+                <p>{{ doc.hosp }}</p>
+            </div>
+            <div id="docCont">
+                <p>Specialization:</p>
+                <p>{{ doc.specialise }}</p>
+            </div>
+            <div id="docCont">
+                <p>Email:</p>
+                <p>{{ doc.Email }}</p>
+            </div>
+            <!-- <div id="docCont">
+                <p>Status:</p>
+                <p>{{ doc.status }}</p>
+            </div> -->
+            <div id="docCont">
+                <p>District:</p>
+                <p>{{ doc.district }}</p>
+            </div>
+            <div id="docCont">
+                <p>Location:</p>
+                <p>{{ doc.location }}</p>
+            </div>
+        </div><br/>
+        <div id="actionLinks">
+            <a id="butAll" href="{% url 'modifyDoc' doc.id %}"><b>Modify</b></a>
+            <a id="butAll" href="{% url 'deleteDoc' doc.id %}"><b>Delete</b></a>
+            <a id="butAll" href="{% url 'doctorss' %}"><b>Back</b></a>
+        </div>
+    </div>
+    <div>
+        {% if messages %}
+                <div class="alert alert-info">{{ messages }}</div>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+    const toggleButton = document.getElementById('toggle-sidenav');
+    const closeButton = document.getElementById('close-sidenav');
+    const sidenav = document.getElementById('sidenav');
+
+    toggleButton.addEventListener('click', () => {
+        sidenav.classList.toggle('open');
+    });
+
+    closeButton.addEventListener('click', () => {
+        sidenav.classList.remove('open');
+    });
+</script>
+   
+</body>
+</html>

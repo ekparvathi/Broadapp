@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Timeslots</title>
+    <script src="https://kit.fontawesome.com/e4ecc635a0.js" crossorigin="anonymous"></script>
+    {% load static %}
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+{% if current_user %}
+<style>
+    body {
+        font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        font-size: small;
+        color: rgb(33, 102, 126);
+    }
+
+    #hdiv {
+        max-width: 500px;
+        margin: auto;
+        border: 2px solid rgb(168, 104, 19);
+        border-radius: 3px;
+        box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.3);
+        padding: 20px;
+    }
+
+    #head {
+        background-color: brown;
+        padding: 10px;
+        color: white;
+        text-align: center;
+        border-radius: 3px;
+    }
+
+    .form-group {
+        display: flex;
+        align-items: center;
+        margin-bottom: 15px;
+    }
+
+    .form-group label {
+        width: 200px;
+        margin-right: 10px;
+    }
+
+    .form-group input {
+        flex-grow: 1;
+        height: 30px;
+    }
+
+    #actionLinks {
+        margin: 20px 0;
+    }
+
+    #actionLinks a,
+    .button {
+        background-color: rgb(244, 222, 222);
+        border: 1px solid rgb(189, 79, 79);
+        border-radius: 5px;
+        padding: 5px 10px;
+        color: rgb(33, 102, 126);
+        text-decoration: none;
+        text-align: center;
+        display: inline-block;
+        font-size: small;
+        font-family: inherit;
+        transition: background-color 0.3s, color 0.3s;
+    }
+
+    #actionLinks a:hover,
+    .button:hover {
+        color: rgb(189, 79, 79);
+    }
+
+    #timeSlots {
+        margin-top: 20px;
+    }
+
+    #timeSlots table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    #timeSlots th,
+    #timeSlots td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left; /* Align text to the left */
+    }
+
+    #timeSlots th {
+        background-color: rgb(189, 79, 79);
+        color: white;
+    }
+
+    #timeSlots tr:nth-child(even) {
+        background-color: rgb(244, 222, 222);
+    }
+
+    #timeSlots tr:hover {
+        background-color: #ddd;
+    }
+
+    #toggle-sidenav {
+            font-size: 24px;
+            margin: 16px;
+            cursor: pointer;
+            position: absolute;
+        }
+        .sidenav {
+            width: 250px;
+            height: 100vh;
+            background-color: #333;
+            color: white;
+            position: fixed;
+            padding: 20px;
+            left: 0px; /* Initially hidden */
+            transition: left 0.3s;
+            z-index: 1000;
+            top:0;   
+        font-size: small;     }
+        .sidenav.open {
+            left: 0; /* Show the sidenav */
+        }
+        .sidenav h2 {
+            color: #fff;
+        }
+        .sidenav a {
+            color: white;
+            text-decoration: none;
+            display: block;
+            padding: 10px;
+        }
+        .sidenav a:hover {
+            background-color: #575757;
+        }
+
+
+    @media (max-width: 768px) {
+        .sidenav {
+            left: -250px; /* Hide offscreen */
+        }
+
+        .sidenav.open {
+            left: 0; /* Show when opened */
+        }
+
+        .main-content {
+            margin-left: 0; /* No space for sidenav */
+            margin-top: 40px;
+        }
+
+        .form-group {
+            flex-direction: column; /* Stack label and input vertically */
+            align-items: flex-start; /* Align to the left */
+        }
+
+        .form-group label {
+            width: auto; /* Auto width for label */
+            margin-bottom: 5px; /* Space below label */
+        }
+
+        #hdiv {
+            width: 90%; /* Full width on mobile */
+        }
+
+        #actionLinks {
+            flex-direction: column; /* Stack action buttons */
+            align-items: flex-start;
+        }
+
+        #actionLinks a {
+            margin-left: 0; /* Remove left margin */
+            margin-top: 10px; /* Add top margin */
+        }
+    }
+</style>
+</head>
+<body>
+    <button id="toggle-sidenav">☰</button>
+    <div id="sidenav" class="sidenav">
+        <h4> Welcome, {{current_user}}</h4>
+        <hr class="custom-hr"/>
+        <a href="{% url 'doctorProfile' %}"><i class="fas fa-user"></i>&nbsp; Profile</a>
+        <a href="{% url 'doctorCreateTimeslot' %}"><i class="fas fa-clock"></i>&nbsp; Add New Timeslot</a>
+        <a href="{% url 'doctorDispTimeslot' %}"><i class="fas fa-calendar-alt"></i>&nbsp; View Timeslots</a>
+        <a href="{% url 'doctorAppointments' %}"><i class="fas fa-list-alt"></i>&nbsp; Appointments</a>
+        <a href="{% url 'startOP' %}"><i class="fas fa-stethoscope"></i>&nbsp; Start OP</a>
+        <hr class="custom-hr"/>
+        <a href="{% url 'doctorChangePwd' %}"><i class="fas fa-key"></i> Change Password</a>
+        <hr class="custom-hr"/>
+        <a href="{% url 'doctorLogin' %}"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        <hr class="custom-hr"/>
+        <button id="close-sidenav" aria-label="Close navigation" style="background: none; border: none; color: white; font-size: 24px; cursor: pointer;">✖</button>
+    </div><br/>    
+<div class="container-fluid main-content">
+    <div id="hdiv">
+        <div id="head"><label>Display TimeSlots</label></div><br/>
+        <form method="POST" enctype="multipart/form-data">       
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="slotDate">Date:</label>
+                <input type="date" id="slotDate" name="slotDate" required>
+            </div>
+            <div id="actionLinks">
+                <button class="button" type="submit">View</button>
+                <a class="button" href="{% url 'doctorHome' %}">Back</a>
+            </div>
+            {% if messages %}
+                <div class="alert">{{ messages }}</div>
+            {% endif %}  
+        </form>
+
+        <!-- Display time slots if available -->
+        {% if slots %}
+        <div id="timeSlots">
+            <h4>Available Time Slots</h4>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Start Time</th>
+                        <th>End Time</th>
+                        <th>Is Booked</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for slot in slots %}
+                        <tr>
+                            <td>{{ slot.start_time }}</td>
+                            <td>{{ slot.end_time }}</td>
+                            <td>{{ slot.isBooked }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% elif error_message %}
+        <div class="alert alert-warning">{{ error_message }}</div>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+    const toggleButton = document.getElementById('toggle-sidenav');
+    const closeButton = document.getElementById('close-sidenav');
+    const sidenav = document.getElementById('sidenav');
+
+    toggleButton.addEventListener('click', () => {
+        sidenav.classList.toggle('open');
+    });
+
+    closeButton.addEventListener('click', () => {
+        sidenav.classList.remove('open');
+    });
+</script>
+{% endif %}
+</body>
+</html>

@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Profile</title>
+    <script src="https://kit.fontawesome.com/e4ecc635a0.js" crossorigin="anonymous"></script>
+    {% load static %}
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+{% if current_user %}
+    <style>
+        body {
+        font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        font-size: small;
+        display: flex;
+        margin: 0;
+        padding: 0;
+        color: black;
+        
+    }
+    #toggle-sidenav {
+            font-size: 24px;
+            margin: 16px;
+            cursor: pointer;
+            position: absolute;
+        }
+        .sidenav {
+            width: 250px;
+            height: 100vh;
+            background-color: #333;
+            color: white;
+            position: fixed;
+            padding: 20px;
+            left: -250px; /* Initially hidden */
+            transition: left 0.3s;
+            z-index: 1000;
+            top:0;   
+        font-size: small;     }
+        .sidenav.open {
+            left: 0; /* Show the sidenav */
+        }
+        .sidenav h2 {
+            color: #fff;
+        }
+        .sidenav a {
+            color: white;
+            text-decoration: none;
+            display: block;
+            padding: 10px;
+        }
+        .sidenav a:hover {
+            background-color: #575757;
+        }
+
+        .main-content {
+            margin-left: 260px; /* Adjusted for sidenav width */
+            padding: 20px;
+            transition: margin-left 0.3s;
+            flex-grow: 1; /* Allow main content to grow */
+        }
+        #dispDoc {
+            background-color: white;
+            border: 1px solid brown;
+            box-shadow: 4px 0px 10px rgba(0, 0, 0, 0.3);
+            border-style: outset;
+            border-radius: 5px;
+            margin-top: 60px;
+            margin-left: 230px;
+            padding-top: 10px;
+            padding-left: 20px;
+            width: 70%; /* Full width for responsiveness */
+            max-width: 360px; /* Optional max width */
+        }
+        #docPic {
+            border: 1px solid brown;
+            border-style: outset;
+            width: 100px;
+            height: 120px;
+            box-shadow: 4px 4px 20px rgba(0, 0, 0, 0.3);
+        }
+        hr {
+            background-color: white;
+            border: 1px solid white;
+            border-style: outset;
+        }
+        #docDetail {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        #docDetail h2 {
+            margin: 0 0 5px 5px;
+        }
+        #docCont {
+            display: flex;
+            padding: 2px 0;
+            margin-left: 20px;
+        }
+        
+        #actionLinks a {
+            color: rgb(33, 102, 126);
+            text-decoration: none;
+            margin-right: 20px;
+        }
+        #actionLinks a:hover {
+            text-decoration: underline;
+        }
+        #p1{
+            font-weight: bold;
+            width: 150px;
+        }
+        #p2{
+            margin-left: 50px;
+        }
+        #butAll{
+    padding: 5px;
+    margin-right: 5px;
+    margin-inline-start: auto;
+    background-color: rgb(244, 222, 222);
+    border-radius: 5px;
+    border-color:rgb(189, 79, 79);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); 
+    border-style:ridge;
+    border-width: 1px;
+    font-size: small;
+    color: rgb(33, 102, 126);
+}
+@media (max-width: 768px) {
+                .sidenav {
+                    left: -250px; /* Hide offscreen */
+                }
+                .sidenav.open {
+                    left: 0; /* Show when opened */
+                }
+                .main-content {
+                    margin-left: -245px; /* No space for sidenav */
+                    padding: 20px;
+                }
+                p{
+                    padding: 8px;
+                    width: 160px;
+                }
+            }
+            @media (min-width: 768px) {
+                #toggle-sidenav {
+                    display: none; /* Hide button on larger screens */
+                }
+                .sidenav {
+                    left: 0; /* Show sidenav on larger screens */
+                }
+            }
+    </style>
+</head>
+<body>
+    <button id="toggle-sidenav">☰</button>
+    <div id="sidenav" class="sidenav">
+        <h4> Welcome, {{current_user}}</h4>
+        <hr class="custom-hr"/>
+        <a href="{% url 'doctorProfile' %}"><i class="fas fa-user"></i>&nbsp; Profile</a>
+        <a href="{% url 'doctorCreateTimeslot' %}"><i class="fas fa-clock"></i>&nbsp; Add New Timeslot</a>
+        <a href="{% url 'doctorDispTimeslot' %}"><i class="fas fa-calendar-alt"></i>&nbsp; View Timeslots</a>
+        <a href="{% url 'doctorAppointments' %}"><i class="fas fa-list-alt"></i>&nbsp; Appointments</a>
+        <a href="{% url 'startOP' %}"><i class="fas fa-stethoscope"></i>&nbsp; Start OP</a>
+        <hr class="custom-hr"/>
+        <a href="{% url 'doctorChangePwd' %}"><i class="fas fa-key"></i> Change Password</a>
+        <hr class="custom-hr"/>
+        <a href="{% url 'doctorLogin' %}"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        <hr class="custom-hr"/>
+        <button id="close-sidenav" aria-label="Close navigation" style="background: none; border: none; color: white; font-size: 24px; cursor: pointer;">✖</button>
+    </div><br/>
+    <div class="main-content">
+        <div id="dispDoc" class="container-fluid">
+            <div class="row" id="docDetail">            
+                <div class="col-md-4">
+                    <img id="docPic" src="{{ doc.profile_pic.url }}" alt="{{ doc.name }}">
+                </div>
+                <div class="col-md-8">
+                    <h4><b>{{ doc.name }}</b></h4>
+                    <h6>{{ doc.descri }}</h6>
+                </div>            
+            </div>
+            <hr/>
+            <div class="row">
+                <div id="docCont">
+                    <p id="p1">Email:</p>
+                    <p id="p2">{{ doc.Email }}</p>
+                </div>
+            </div>
+            <div class="row">
+                <div id="docCont">
+                    <p  id="p1">Password:</p>
+                    <p id="p2">{{ doc.password }}</p>
+                </div>
+            </div>
+            <div class="row">
+                <div id="docCont">
+                    <p  id="p1">Qualification:</p>
+                    <p  id="p2">{{ doc.qualification }}</p>
+                </div>
+            </div>
+            <div class="row">
+                <div id="docCont">
+                    <p  id="p1">Hospital:</p>
+                    <p  id="p2">{{ doc.hosp }}</p>
+                </div>
+            </div>
+            <div class="row">
+                <div id="docCont">
+                    <p  id="p1">Specialization:</p>
+                    <p  id="p2">{{ doc.specialise }}</p>
+                </div>
+            </div>
+            <div class="row">
+                <div id="docCont">
+                    <p  id="p1">Join Date:</p>
+                    <p  id="p2">{{ doc.joinDate }}</p>
+                </div>
+            </div>
+            <div class="row">
+                <div id="docCont">
+                    <p  id="p1">Status:</p>
+                    <p  id="p2">{{ doc.status }}</p>
+                </div>
+            </div>
+            <div class="row">
+                <div id="docCont">
+                    <p  id="p1">District:</p>
+                    <p id="p2">{{ doc.district }}</p>
+                </div>
+            </div>
+            <div class="row">
+                <div id="docCont">
+                    <p id="p1">Location:</p>
+                    <p id="p2">{{ doc.location }}</p>
+                </div>
+            </div>
+            <div id="actionLinks">
+                <a id="butAll" href="{% url 'doctorModify' %}"><b>Modify</b></a>
+                <a id="butAll" href="{% url 'doctorHome' %}"><b>Back</b></a>
+            </div><br/>
+        </div>
+        <div>
+            
+{% if messages %}
+    <div class="alert alert-info">{{ messages }}</div>
+{% endif %}
+        </div>
+    </div>
+    <script>
+        const toggleButton = document.getElementById('toggle-sidenav');
+        const closeButton = document.getElementById('close-sidenav');
+        const sidenav = document.getElementById('sidenav');
+
+        toggleButton.addEventListener('click', () => {
+            sidenav.classList.toggle('open');
+        });
+
+        closeButton.addEventListener('click', () => {
+            sidenav.classList.remove('open');
+        });
+    </script>
+</body>
+{% endif %}
+</html>

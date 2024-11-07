@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Get Doctors Time For Appointment</title>
+    <script src="https://kit.fontawesome.com/e4ecc635a0.js" crossorigin="anonymous"></script>
+
+{% load static %}
+
+<style>
+    body {
+        font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        font-size: small;
+        color: rgb(33, 102, 126);
+        margin: 0;
+    }
+    #hdiv {
+        max-width: 400px;
+        margin: auto;
+        border: 2px solid brown;
+        border-radius: 5px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); 
+        padding: 20px;
+    }
+    #head {
+        background-color: brown;
+        padding: 10px;
+        color: white;  
+        text-align: center;  
+        border-radius: 5px;
+    }
+    .form-row {
+        display: flex;
+        align-items: center;
+        margin-bottom: 15px;
+    }
+    .form-row label {
+        width: 200px;
+        margin-right: 10px;
+    }
+    .form-row select, .form-row input {
+        height: 30px;
+        width: 200px;
+    }
+    .action-button {
+        background-color: rgb(244, 222, 222);
+        border: 1px solid rgb(189, 79, 79);
+        border-radius: 5px;
+        padding: 5px 10px;
+        color: rgb(33, 102, 126);
+        text-decoration: none;
+        text-align: center;
+        display: inline-block;
+        font-size: medium;
+        font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        transition: background-color 0.3s, color 0.3s;
+    }
+    .action-button:hover {
+        background-color: rgb(189, 79, 79);
+        color: white;
+    }
+    #toggle-sidenav {
+            font-size: 24px;
+            margin: 16px;
+            cursor: pointer;
+        }
+        .sidenav {
+            width: 250px;
+            height: 100vh;
+            background-color: #333;
+            color: white;
+            position: fixed;
+            left: -250px; /* Initially hidden */
+            transition: left 0.3s;
+            z-index: 1000;
+            top:0;     
+            font-size: small;  
+         }
+        .sidenav.open {
+            left: 0; /* Show the sidenav */
+        }
+        .sidenav h2 {
+            color: #fff;
+        }
+        .sidenav a {
+            color: white;
+            text-decoration: none;
+            display: block;
+            padding: 10px;
+        }
+        .sidenav a:hover {
+            background-color: #575757;
+        }
+    .main-content {
+        margin-left: 260px;
+        padding: 20px;
+        font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        font-size: small;
+        color: rgb(33, 102, 126);;
+    }
+    .pagination {
+        margin: 20px 0;
+        text-align: center;
+    }
+    .pagination a {
+        margin: 0 10px;
+        padding: 5px 10px;
+        background-color: rgb(189, 79, 79);
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+    }
+    .pagination a:hover {
+        background-color: rgb(168, 104, 19);
+    }
+    #timeSlots {
+        margin-top: 20px;
+    }
+    #timeSlots table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    #timeSlots th,
+    #timeSlots td {
+        border: 1px solid #ddd;
+        padding: 8px;
+    }
+    #timeSlots th {
+        background-color: rgb(189, 79, 79);
+        color: white;
+    }
+    #timeSlots tr:nth-child(even) {
+        background-color: rgb(244, 222, 222);
+        color: rgb(33, 102, 126);
+    }
+    #timeSlots tr:nth-child(odd) {
+        color: rgb(33, 102, 126);
+    }
+    #timeSlots tr:hover {
+        background-color: #ddd;
+    }
+    #toggle-sidenav {
+            font-size: 24px;
+            margin: 16px;
+            cursor: pointer;
+            position: absolute;
+        }
+    #message{
+        margin-left: 300px;
+        color: rgb(33, 102, 126);
+    }
+    @media (max-width: 768px) {
+        .sidenav {
+            left: -250px; /* Hide offscreen */
+        }
+        .sidenav.open {
+            left: 0; /* Show when opened */
+        }
+        .main-content {
+            margin-left: 0; /* No space for sidenav */
+            padding: 20px;
+            margin-top: 40px;
+        }
+    }
+    @media (min-width: 768px) {
+        #toggle-sidenav {
+            display: none; /* Hide button on larger screens */
+        }
+        .sidenav {
+            left: 0; /* Show sidenav on larger screens */
+        }
+        .main-content{margin-left: 260px;}
+    }
+</style>
+</head>
+<body>
+    <button id="toggle-sidenav" aria-label="Toggle navigation">☰</button>
+    <div id="sidenav" class="sidenav ">
+        <h2>Broadway Admin</h2><hr/>
+        <a href="{% url 'doctorss' %}"><i class="fa-solid fa-user-doctor"></i>&nbsp; Doctors</a>
+        <a href="{% url 'hospitals' %}"><i class="fa-solid fa-hospital"></i>&nbsp; Hospitals</a>
+        <a href="{% url 'specializations' %}"><i class="fa-solid fa-clinic-medical"></i>&nbsp; Departments</a>
+        <a href="{% url 'timeslots' %}"><i class="fa-solid fa-clock"></i>&nbsp; Timeslots</a>
+        <a href="{% url 'appointments' %}"><i class="fa-solid fa-calendar-check"></i>&nbsp; Appointments</a>
+        <a href="{% url 'reminders' %}"><i class="fa-solid fa-bell"></i>&nbsp; Reminders</a><hr/>
+        <a href="{% url 'adminlogin' %}"><i class="fa-solid fa-sign-out-alt"></i>&nbsp;Logout</a><hr/>
+        <button id="close-sidenav" style="background: none; border: none; color: white; font-size: 24px; cursor: pointer;" aria-label="Close navigation">✖</button>
+    </div><br/>
+<div class="main-content">
+    <div id="hdiv">
+        <form method="POST" enctype="multipart/form-data">       
+            {% csrf_token %}  
+            <div id="head" class="row"><label>Display TimeSlots</label></div><br/>  
+            <div class="form-row">
+                <label for="selectDoc">Doctor:</label>
+                <select name="selectDoc" class="filter-selectbox" required>
+                    <option value="" disabled selected>Select a Doctor</option>
+                    {% for d in doc %}
+                        <option value="{{ d.id }}" {% if submitted_data.select_field == d.id %}selected{% endif %}>{{ d.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-row">        
+                <label for="slotDate">Date:</label>
+                <input type="date" id="slotDate" name="slotDate" required>
+            </div>  
+            <button class="action-button" type="submit">View</button> 
+            <a class="action-button" href="{% url 'appointments' %}">Back</a>
+        </form>
+        <!-- Display time slots if available -->
+        {% if slots %}
+        <div id="timeSlots">
+            <h2>Available Time Slots</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Start Time</th>
+                        <th>End Time</th>
+                        <th>Is Booked</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for slot in slots %}
+                        <tr>
+                            <td><a href="{% url 'makeAppointment' slot.id %}">{{ slot.start_time }}</a></td>
+                            <td>{{ slot.end_time }}</td>
+                            <td>{{ slot.isBooked }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+           
+        </div>
+        {% endif %}
+</div>
+
+<script>
+    const toggleButton = document.getElementById('toggle-sidenav');
+    const closeButton = document.getElementById('close-sidenav');
+    const sidenav = document.getElementById('sidenav');
+
+    toggleButton.addEventListener('click', () => {
+        sidenav.classList.toggle('open');
+    });
+
+    closeButton.addEventListener('click', () => {
+        sidenav.classList.remove('open');
+    });
+</script>
+    
+</body>
+</html>

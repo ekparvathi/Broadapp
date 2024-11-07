@@ -1,0 +1,113 @@
+/* Add a black background color to the top navigation */
+.topnav {
+    background-color: #333;
+    overflow: hidden;
+}
+
+/* Style the links inside the navigation bar */
+.topnav a {
+    float: left;
+    color: #f2f2f2;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 17px;
+}
+
+/* Change the color of links on hover */
+.topnav a:hover {
+    background-color: #ddd;
+    color: black;
+}
+
+/* Add a color to the active/current link */
+.topnav a.active {
+    background-color: #04AA6D;
+    color: white;
+}
+
+/* Heading styles */
+h1 {
+    margin-top: 50px;
+    font-family: 'Times New Roman', Times, serif;
+    text-align: center; /* Centered for better responsiveness */
+    color: #04AA6D;
+}
+
+/* Paragraph styles */
+p {
+    text-align: center; /* Centered for better responsiveness */
+    color: #333;
+}
+
+/* Button styles */
+button {
+    margin-top: 20px;
+    width: 200px;
+    height: 40px;
+    color: black;
+    border-radius: 5px;
+    display: inline-block;
+}
+
+/* Individual button styles */
+#food {
+    background-color: aquamarine;
+}
+
+#job {
+    background-color: lightblue;
+    margin-top: 10px;
+}
+
+#doctor {
+    background-color: aquamarine;
+}
+
+#buy {
+    background-color: lightblue;
+    margin-top: 10px;
+}
+
+
+
+/* Responsive styles */
+@media only screen and (max-width: 600px) {
+    /* Top navigation responsiveness */
+    .topnav {
+        width: 100%; /* Make navigation full width */
+        text-align: center;
+    }
+
+    .topnav a {
+        float: none; /* Remove floating */
+        display: block; /* Stack the links */
+        padding: 10px;
+        font-size: 14px;
+    }
+
+    /* Headings and text adjustments */
+    h1 {
+        margin-top: 30px;
+        font-size: 21px; /* Smaller font size for mobile */
+    }
+
+    p {
+        text-align: center; /* Adjust text alignment */
+        margin: 10px 20px; /* Margins for readability */
+    }
+
+    /* Buttons responsiveness */
+    button {
+        width: 90%; /* Full width for buttons on small screens */
+        margin-left: 5%; /* Center the button */
+        margin-right: 5%;
+    }
+
+    #food, #doctor, #buy {
+        margin-left: 5%; /* Center aligned */
+    }
+    #user{
+        margin-right: 500px;
+    }
+}

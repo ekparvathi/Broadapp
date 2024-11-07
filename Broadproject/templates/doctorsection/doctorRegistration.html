@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Registration Form</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            color: rgb(242, 246, 248);
+            background-color: #686669;
+            font-size:large;
+        }
+        #docReg {
+            margin: 20px auto;
+            max-width: 550px;
+            border: 1px solid rgb(62, 59, 59);
+            border-radius: 5px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            background-color: rgb(97, 128, 12);
+        }
+        #head {
+            background-color: rgb(168, 88, 243);
+            border-radius: 5px;
+            padding: 10px;
+            color: white;
+            text-align:justify;
+        }
+        #butAll{
+            background-color: rgb(168, 88, 243) ;
+            color: white;
+            
+        }
+    </style>
+    <script>
+        function previewImage() {
+            var file = document.getElementById('profile_pic').files[0]; 
+            var reader = new FileReader();
+            reader.onloadend = function () {
+                var imgPreview = document.getElementById('pPic');
+                imgPreview.src = reader.result;
+                imgPreview.style.display = 'block'; 
+            }
+            if (file) {
+                reader.readAsDataURL(file); 
+            } else {
+                imgPreview.src = ""; 
+            }
+        }
+        function toggleNewFields(type) {
+            if (type === 'Hosp') {
+                const selectHosp = document.getElementById('selectHosp');
+                const newHospFields = document.getElementById('newHosp');
+                const newHospLoc = document.getElementById('newHospLoc');
+                if (selectHosp.value === 'new') {
+                    newHospFields.style.display = 'block';
+                    newHospLoc.style.display = 'block';
+                } else {
+                    newHospFields.style.display = 'none';
+                    newHospLoc.style.display = 'none';
+                }
+            } else if (type === 'Spec') {
+                const selectSpecial = document.getElementById('selectSpecial');
+                const newSpec = document.getElementById('newSpec');
+                if (selectSpecial.value === 'new') {
+                    newSpec.style.display = 'block';
+                } else {
+                    newSpec.style.display = 'none';
+                }
+            }
+        }
+    </script>
+</head>
+<body>
+
+<div id="docReg" class="container">
+    <div id="head" class="row">
+        <label>Registration Form</label>
+    </div>
+    <form method="POST" enctype="multipart/form-data">       
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="profile_pic">Profile Picture</label><br/>
+            <img src="" alt="profile_pic" style="width: 75px; height: 70px; display: none;" name="pPic" id="pPic">
+            <input type="file" id="profile_pic" required name="profile_pic" class="form-control" onchange="previewImage()">
+        </div>
+        <div class="form-row">
+            <div class="form-group col">
+                <label for="name">Name</label>
+                <input type="text" id="name" name="name" required class="form-control">
+            </div>
+            <div class="form-group col">
+                <label for="qualification">Qualification</label>
+                <input type="text" id="qualification" name="qualification" required class="form-control">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col">
+                <label for="selectHosp">Hospital</label>
+                <select name="selectHosp" id="selectHosp" class="form-control" onchange="toggleNewFields('Hosp')" required>
+                    <option value="">Select a Hospital</option>
+                    {% for h in hosp %}
+                        <option value="{{ h.id }}">{{ h.name }}</option>
+                    {% endfor %}
+                    <option value="new">Add New Hospital</option>
+                </select>
+                <input type="text" id="newHosp" name="newHosp" placeholder="Enter new hospital name" style="display:none;" class="form-control">
+                <input type="text" id="newHospLoc" name="newHospLoc" placeholder="Enter new hospital Location" style="display:none;" class="form-control">
+            </div>
+            <div class="form-group col">
+                <label for="selectSpecial">Specialization</label>
+                <select name="selectSpecial" id="selectSpecial" class="form-control" onchange="toggleNewFields('Spec')" required>
+                    <option value="">Select Specialization</option>
+                    {% for s in special %}
+                        <option value="{{ s.id }}">{{ s.name }}</option>
+                    {% endfor %}
+                    <option value="new">Add New Specialization</option>
+                </select>
+                <input type="text" id="newSpec" name="newSpec" placeholder="Enter new specialization" style="display:none;" class="form-control">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col">
+                <label for="lat">Latitude</label>
+                <input type="text" id="lat" name="lat" required class="form-control">
+            </div>
+            <div class="form-group col">
+                <label for="long">Longitude</label>
+                <input type="text" id="long" name="long" required class="form-control">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col">
+                <label for="descri">Description</label>
+                <textarea id="descri" name="descri" required class="form-control">Comments</textarea>
+            </div>
+            <div class="form-group col">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required class="form-control">
+            </div>                    
+        </div>
+        <div class="form-row">
+            <div class="form-group col">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required class="form-control">
+            </div>
+            <div class="form-group col">
+                <label for="cpassword">Confirm Password</label>
+                <input type="password" id="cpassword" name="cpassword" required class="form-control">
+            </div>
+        </div>
+        <button id="butAll" type="submit" class="btn  btn-block">Register</button>
+        <hr/>
+        <div class="text-center">
+            <a  id="butAll" href="{% url 'doctorLogin' %}">Login</a>
+        </div>
+        <div class="mt-3">
+            {% if messages %}
+                <div class="alert alert-warning">{{ messages }}</div>
+            {% endif %}
+        </div>
+    </form>
+    
+    
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

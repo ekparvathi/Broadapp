@@ -1,0 +1,185 @@
+{% extends 'doctorAdmin/base.html' %}
+{% block title %}Modify Timeslot{% endblock %}
+{% block body %}
+{% load static %}
+    
+    <style>
+        body {
+        font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        font-size: large;
+        color: rgb(33, 102, 126);
+        margin: 0;
+    }
+        #hdiv{
+            width: 550px;
+            border: 1px brown;
+            border-style: inset;
+            border-radius: 5px;
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); 
+        }
+        #head{
+            background-color: brown;
+            padding: 10px;
+            color: white;  
+            text-align: center;  
+        }
+        #hdiv1{
+            text-align: left;
+            align-items:flex-start;
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+            font-size: medium;
+            display: flex;
+            margin-left: 10px;
+            color: rgb(33, 102, 126);
+        }
+
+        #hdiv2{
+            display: flex;
+            margin-left: 250px;
+        }
+        #butAll{
+            padding: 5px;
+            margin-right: 5px;
+            margin-inline-start: auto;
+            background-color: rgb(244, 222, 222);
+            border-radius: 5px;
+            border-color:rgb(189, 79, 79);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); 
+            /* border-style:ridge; */
+            border-width: 1px;
+            font-size: large;
+            color: rgb(33, 102, 126);
+            /* width: 90px;
+            height: 50px; */
+        }
+        #toggle-sidenav {
+                font-size: 24px;
+                margin: 16px;
+                cursor: pointer;
+            }
+            .sidenav {
+                width: 250px;
+                height: 100vh;
+                background-color: #333;
+                color: white;
+                padding: 20px;
+                position: fixed;
+                left: -250px; /* Initially hidden */
+                transition: left 0.3s;
+                z-index: 1000;
+            }
+            .sidenav.open {
+                left: 0; /* Show the sidenav */
+            }
+            .sidenav h2 {
+                color: #fff;
+            }
+            .sidenav a {
+                color: white;
+                text-decoration: none;
+                display: block;
+                padding: 10px;
+            }
+            .sidenav a:hover {
+                background-color: #575757;
+            }
+   .main-content {
+       margin-left: 260px;
+       padding: 20px;
+       flex-grow: 1;
+   }
+   @media (max-width: 768px) {
+                .sidenav {
+                    left: -250px; /* Hide offscreen */
+                }
+                .sidenav.open {
+                    left: 0; /* Show when opened */
+                }
+                .main-content {
+                    margin-left: 0; /* No space for sidenav */
+                    padding: 20px;
+                }
+ 	
+            }
+            @media (min-width: 768px) {
+                #toggle-sidenav {
+                    display: none; /* Hide button on larger screens */
+                }
+                .sidenav {
+                    left: 0; /* Show sidenav on larger screens */
+                }
+            }
+
+</style>
+    <div class="container-fluid">
+        <div id="hdiv2" style=" float:right;padding: 5px;">
+            <!-- <button id="butAll" type="submit" >Add</button>  -->
+                <button  id="butAll"><a href="{% url 'timeslots' %}">Back</a> </button>
+            </div>
+            <form  id="hdiv" method="POST"  target="contentFrame" enctype="multipart/form-data">       
+                {% csrf_token %}  
+                <!-- <div>             -->
+                    <div id="head" class="row"><label>Create TimeSlots</label></div>  <br/>
+                    <div id="hdiv1" class="row">
+                        <div  class="col col-md-12" style="display: flex;">
+                            <label for=""style="width: 200px;height: 30px;">Doctor</label><label style="width: 10px;height: 30px;">:</label><br/>
+                            <select name="selectDoc" class="filter-selectbox" style="height: 30px;width: 200px; ">
+                                <option value="{{d.name.id}}">{{d.name}}</option>
+                                {% for d in doc %}
+                                    <option value="{{ d.id }}">{{ d.name }}</option>
+                                {% endfor %} </select>
+                        </div>
+                    </div><br/> 
+                    <div id="hdiv1" class="row">        
+                        <div class="col col-md-12" style="display: flex;">
+                            <label for=""style="width: 200px;height: 30px;">Date</label><label style="width: 10px;height: 30px;">:</label><br/>
+                            <input type="date" style="height: 30px;width: 200px; " value="{{d.date}}" id="slotDate" name="slotDate">
+                        </div> 
+                    </div>   <br/> 
+                    <div id="hdiv1" class="row">        
+                        <div class="col col-md-12" style="display: flex;">
+                            <label for=""style="width: 200px;height: 30px;">Start Time</label><label style="width: 10px;height: 30px;">:</label><br/>
+                            <input type="time" style="height: 30px;width: 200px; "value="{{d.start_time}}" id="slotSTime" name="slotSTime">
+                        </div>
+                    </div> <br/> 
+                    <div id="hdiv1" class="row">        
+                        <div class="col col-md-12" style="display: flex;">
+                            <label for=""style="width: 200px;height: 30px;">End Time</label><label style="width: 10px;height: 30px;">:</label><br/>
+                            <input type="time" style="height: 30px;width: 200px; " value="{{d.end_time}}" id="slotETime" name="slotETime">
+                        </div>
+                    </div> <br/>
+                    <div id="hdiv1" class="row">        
+                        <div class="col col-md-12" style="display: flex;">
+                            <label for=""style="width: 200px;height: 30px;">Duration of slot in minutes</label><label style="width: 10px;height: 30px;">:</label><br/>
+                            <input type="text" style="height: 30px;width: 200px; "value="{{}}" id="slotDuration" name="slotDuration">
+                        </div>
+                    </div>    <br/>   
+                    <div id="hdiv2" class="col col-md-4">
+                        <button id="butAll" type="submit" >Create</button> 
+                        <!-- <button  id="butAll"><a href="/doctorss/">Back</a> </button> -->
+                    </div> <br/> 
+            </form>
+            {% if messages %}
+            <div class="alert">
+                {% for message in messages %}
+                    {{ message }}
+                {% endfor %}
+            </div>
+            {% endif %}
+    </div>
+    <script>
+        const toggleButton = document.getElementById('toggle-sidenav');
+        const closeButton = document.getElementById('close-sidenav');
+        const sidenav = document.getElementById('sidenav');
+
+        toggleButton.addEventListener('click', () => {
+            sidenav.classList.toggle('open');
+        });
+
+        closeButton.addEventListener('click', () => {
+            sidenav.classList.remove('open');
+        });
+    </script>
+
+    {% endblock %}

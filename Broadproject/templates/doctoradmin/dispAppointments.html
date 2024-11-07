@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Appointments of Doctor</title>
+    <script src="https://kit.fontawesome.com/e4ecc635a0.js" crossorigin="anonymous"></script>
+    
+{% load static %}
+
+<style>
+    body {
+        font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        font-size: small;
+        color: rgb(33, 102, 126);
+        margin: 0;
+    }
+    #dbTabs {
+        font-family: 'Gill Sans', 'Gill Sans MT', 'Calibri', 'Trebuchet MS', sans-serif;
+        border: 2px solid rgb(168, 104, 19);
+        box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.3);
+        margin: 10px auto;
+        width: fit-content;
+    }
+    #dbTabs td, #dbTabs th {
+        border: 1px solid #ddd;
+        padding: 10px 10px;
+        color: rgb(33, 102, 126);
+    }
+    #dbTabs th {
+        background-color: rgb(189, 79, 79);
+        color: white;
+    }
+    #actionLinks a {
+        color: rgb(33, 102, 126);
+        text-decoration: none;
+        padding: 5px 10px;
+    }
+    #actionLinks a:hover {
+        text-decoration: underline;
+    }
+    
+    #hdiv {
+        width: 450px;
+        border: 1px brown;
+        border-style: inset;
+        border-radius: 5px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        margin: 20px auto;
+    }
+    #head {
+        background-color: brown;
+        padding: 10px;
+        color: white;
+        text-align: center;
+    }
+    .form-group {
+        display: flex;
+        align-items: center;
+        margin: 15px;
+    }
+    .form-group label {
+        width: 200px;
+        margin-right: 10px;
+    }
+    .form-group select, .form-group input {
+        height: 30px;
+        width: 200px;
+    }
+    #toggle-sidenav {
+            font-size: 24px;
+            margin: 16px;
+            cursor: pointer;
+        }
+        .sidenav {
+            width: 250px;
+            height: 100vh;
+            background-color: #333;
+            color: white;
+            position: fixed;
+            left: -250px; /* Initially hidden */
+            transition: left 0.3s;
+            z-index: 1000;
+            top:0;     
+            font-size: small;  
+         }
+        .sidenav.open {
+            left: 0; /* Show the sidenav */
+        }
+        .sidenav h2 {
+            color: #fff;
+        }
+        .sidenav a {
+            color: white;
+            text-decoration: none;
+            display: block;
+            padding: 10px;
+        }
+        .sidenav a:hover {
+            background-color: #575757;
+        }
+
+    .main-content {
+        margin-left: 0; /* Reset margin for smaller screens */
+    }
+
+    .action-button {
+        padding: 10px;
+        background-color: rgb(244, 222, 222);
+        border: 1px solid rgb(189, 79, 79);
+        border-radius: 5px;
+        color: rgb(33, 102, 126);
+        text-decoration: none;
+        text-align: center;
+        display: inline-block;
+        margin-top: 10px;
+        margin-left: 20px;
+        cursor: pointer;
+        font-size: medium;
+        font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    }
+    .action-button:hover {
+        background-color: rgb(189, 79, 79);
+        color: white;
+    }
+
+    /* Scrollable Table Styles */
+    .table-responsive {
+        overflow-x: auto; /* Enable horizontal scrolling */
+        max-width: 93%; /* Full width */
+        margin-bottom: 20px; /* Space below the table */
+        font-size: small;
+    }
+    @media (max-width: 768px) {
+        .sidenav {
+            left: -250px;
+        }
+        .sidenav.open {
+            left: 0;
+        }
+        .main-content {
+            margin-left: -10px;
+        }
+        #hdiv {
+            width: 80%; /* Full width on smaller screens */
+            left: 300px ;
+            padding: 10px;
+        }
+        #dbTabs{
+            margin-left: 15px;
+            width: 100%;
+        }
+    }
+    @media (min-width: 768px) {
+        #toggle-sidenav {
+            display: none; /* Hide button on larger screens */
+        }
+        .sidenav {
+            left: 0; /* Show sidenav on larger screens */
+        }
+        .main-content{
+            margin-left: 200px;
+        }
+        #dbTabs{
+            margin-left: 70px;
+        }
+        h3{
+            margin-left: 20px;
+        }
+
+    }
+</style>
+</head>
+<body>
+    <button id="toggle-sidenav" aria-label="Toggle navigation">☰</button>
+    <div id="sidenav" class="sidenav ">
+        <h2>Broadway Admin</h2><hr/>
+        <a href="{% url 'doctorss' %}"><i class="fa-solid fa-user-doctor"></i>&nbsp; Doctors</a>
+        <a href="{% url 'hospitals' %}"><i class="fa-solid fa-hospital"></i>&nbsp; Hospitals</a>
+        <a href="{% url 'specializations' %}"><i class="fa-solid fa-clinic-medical"></i>&nbsp; Departments</a>
+        <a href="{% url 'timeslots' %}"><i class="fa-solid fa-clock"></i>&nbsp; Timeslots</a>
+        <a href="{% url 'appointments' %}"><i class="fa-solid fa-calendar-check"></i>&nbsp; Appointments</a>
+        <a href="{% url 'reminders' %}"><i class="fa-solid fa-bell"></i>&nbsp; Reminders</a><hr/>
+        <a href="{% url 'adminlogin' %}"><i class="fa-solid fa-sign-out-alt"></i>&nbsp;Logout</a><hr/>
+        <button id="close-sidenav" style="background: none; border: none; color: white; font-size: 24px; cursor: pointer;" aria-label="Close navigation">✖</button>
+    </div>
+<div class="container-fluid main-content">
+    <div id="hdiv">
+        <div id="head"><label>Display TimeSlots</label></div>
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="selectDoc">Doctor:</label>
+                <select name="selectDoc" class="filter-selectbox" required>
+                    <option value="" disabled selected>Select a Doctor</option>
+                    {% for d in doc %}
+                        <option value="{{ d.id }}" {% if submitted_data.select_field == d.id %}selected{% endif %}>{{ d.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="slotDate">Date:</label>
+                <input type="date" id="slotDate" name="slotDate" required>
+            </div>
+            <button class="action-button" type="submit">View</button>
+            <a class="action-button" href="{% url 'appointments' %}">Back</a>
+        </form>        
+    </div>
+    {% if slots %}
+    <div id="timeSlots" class="container my-4">
+        <div style="align-items:center ;align-content: center; margin-left: 50px;">
+            <h3>Appointments for Selected Slots</h3>
+        </div>
+        
+        <div class="table-responsive"> <!-- Use Bootstrap's responsive class -->
+            <table id="dbTabs" class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Patient Name</th>
+                        <th>Email</th>
+                        <th>Contact</th>
+                        <th>Address</th>
+                        <th>Appointment Date</th>
+                        <th>Time Slot</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for appoint in appoints %}
+                        <tr>
+                            <td>{{ appoint.appPatient }}</td>
+                            <td>{{ appoint.appEmail }}</td>
+                            <td>{{ appoint.appContact }}</td>
+                            <td>{{ appoint.appAddress }}</td>
+                            <td>{{ appoint.time_slot.date }}</td>
+                            <td>{{ appoint.time_slot.start_time }} - {{ appoint.time_slot.end_time }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% if messages %}
+        {{ messages }}
+    {% endif %}
+</div>
+{% endif %}
+<script>
+    const toggleButton = document.getElementById('toggle-sidenav');
+    const closeButton = document.getElementById('close-sidenav');
+    const sidenav = document.getElementById('sidenav');
+
+    toggleButton.addEventListener('click', () => {
+        sidenav.classList.toggle('open');
+    });
+
+    closeButton.addEventListener('click', () => {
+        sidenav.classList.remove('open');
+    });
+</script>
+    
+</body>
+</html>

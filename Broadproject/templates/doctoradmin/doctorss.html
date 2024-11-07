@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctors Registered</title>
+    <script src="https://kit.fontawesome.com/e4ecc635a0.js" crossorigin="anonymous"></script>
+<style>
+   body {
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-size: small;
+    display: flex;
+    margin: 0;
+    padding: 0;
+}
+
+#toggle-sidenav {
+            font-size: 24px;
+            margin: 16px;
+            cursor: pointer;
+            position: absolute;
+        }
+        .sidenav {
+            width: 250px;
+            height: 100vh;
+            background-color: #333;
+            color: white;
+            position: fixed;
+            left: -250px; /* Initially hidden */
+            transition: left 0.3s;
+            z-index: 1000;
+            top:0;        }
+        .sidenav.open {
+            left: 0; /* Show the sidenav */
+        }
+        .sidenav h2 {
+            color: #fff;
+        }
+        .sidenav a {
+            color: white;
+            text-decoration: none;
+            display: block;
+            padding: 10px;
+        }
+        .sidenav a:hover {
+            background-color: #575757;
+        }
+        .main-content {
+            margin-left: 300px; /* Space for the sidenav */
+            padding: 20px;
+            margin-top: 50px;
+        }
+
+.pagination {
+    margin: 20px 0;
+    text-align: center;
+}
+
+.pagination a {
+    margin: 0 10px;
+    padding: 5px 10px;
+    background-color: rgb(189, 79, 79);
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.pagination a:hover {
+    background-color: rgb(168, 104, 19);
+}
+
+#butAll {
+    padding: 5px;
+    margin-right: 5px;
+    background-color: rgb(244, 222, 222);
+    border: 1px solid rgb(189, 79, 79);
+    border-radius: 5px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    font-size: medium;
+    color: rgb(33, 102, 126);
+    display: inline-block;
+    text-decoration: none;
+}
+
+#dbTabs {
+    border: 2px solid rgb(168, 104, 19);
+    width: 80%;
+    font-size: small;
+    border-collapse: collapse;
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.3);
+    margin-top: 50px;
+}
+
+#dbTabs th, #dbTabs td {
+    border: 1px solid #ddd;
+    padding: 10px 20px;
+    color: rgb(33, 102, 126);
+}
+
+#dbTabs th {
+    background-color: rgb(189, 79, 79);
+    color: white;
+}
+
+#dbTabs tr:nth-child(even) {
+    background-color: rgb(244, 222, 222);
+}
+
+#dbTabs tr:hover {
+    background-color: #ddd;
+}
+
+#actionLinks a {
+    color: rgb(33, 102, 126);
+    text-decoration: none;
+    padding: 5px 10px;
+    margin-left: 10px;
+    transition: background-color 0.3s;
+}
+
+#actionLinks a:hover {
+    background-color: rgb(189, 79, 79);
+    color: white;
+}
+
+#searchForm {
+    color: rgb(33, 102, 126);
+    margin-left: 0px;
+    margin-top: 30px;
+}
+
+#searchForm input {
+    width: 250px;
+    height: 30px;
+    padding: 5px;
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+#message {
+    margin-left: 300px;
+    color: rgb(33, 102, 126);
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+            .sidenav {
+                left: -270px; /* Hide offscreen */
+            }
+            .sidenav.open {
+                left: 0; /* Show when opened */
+                margin-right: 200px;
+            }
+            .main-content {
+                margin-left: 0; /* No space for sidenav */
+                padding: 20px;
+            }
+        }
+        @media (min-width: 768px) {
+            #toggle-sidenav {
+                display: none; /* Hide button on larger screens */
+            }
+            .sidenav {
+                left: 0; /* Show sidenav on larger screens */
+            }
+            .main-content{
+                margin-left: 300px;
+            }
+        }
+
+</style>
+</head>
+<body>
+    <button id="toggle-sidenav" aria-label="Toggle navigation">☰</button>
+    <div id="sidenav" class="sidenav ">
+        <h2>Broadway Admin</h2><hr/>
+        <a href="{% url 'doctorss' %}"><i class="fa-solid fa-user-doctor"></i>&nbsp; Doctors</a>
+        <a href="{% url 'hospitals' %}"><i class="fa-solid fa-hospital"></i>&nbsp; Hospitals</a>
+        <a href="{% url 'specializations' %}"><i class="fa-solid fa-clinic-medical"></i>&nbsp; Departments</a>
+        <a href="{% url 'timeslots' %}"><i class="fa-solid fa-clock"></i>&nbsp; Timeslots</a>
+        <a href="{% url 'appointments' %}"><i class="fa-solid fa-calendar-check"></i>&nbsp; Appointments</a>
+        <a href="{% url 'reminders' %}"><i class="fa-solid fa-bell"></i>&nbsp; Reminders</a><hr/>
+        <a href="{% url 'adminlogin' %}"><i class="fa-solid fa-sign-out-alt"></i>&nbsp;Logout</a><hr/>
+        <button id="close-sidenav" style="background: none; border: none; color: white; font-size: 24px; cursor: pointer;" aria-label="Close navigation">✖</button>
+    </div>
+    <div class="container main-content">
+        <div class="row justify-content-end mb-3" style="display: flex;">
+            <div class="col-auto">
+                <a id="butAll" href="{% url 'addModDoc' %}" class="btn btn-primary"><b>Add</b></a>
+                <a id="butAll" href="{% url 'doctorAdminHome' %}" class="btn btn-secondary"><b>Back</b></a> 
+            </div>
+        </div><br/>
+        <div class="row justify-content-end mb-3">
+            <div class="col-auto">
+                <form action="{% url 'searchDoctors' %}" method="GET" id="searchForm">
+                    <div class="input-group"  style="display: flex;">
+                        <input type="search" name="name" id="search" class="form-control" placeholder="Search Doctor">
+                        <button id="butAll" type="submit" class="btn btn-outline-secondary">Search</button>
+                    </div>
+                </form>
+            </div>            
+        </div>
+        <div class="row">
+            <div class="col">
+                <table id="dbTabs" class="table table-bordered table-responsive">
+                    <thead class="thead-light">
+                        <tr>
+                            <th colspan="2">Doctors Registered</th>
+                        </tr>
+                        <tr>
+                            <th>Name</th>
+                            <th>Hospital</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for d in data %}
+                        <tr>
+                            <td>
+                                <a target="_self" href="{% url 'dispDoc' d.id %}" style="text-decoration: none; color: inherit;">{{ d }}</a>
+                            </td> 
+                            <td>{{ d.hosp }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="2">No Doctors Registered Yet</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <div class="pagination justify-content-center">
+                    {% if data.has_previous %}
+                        <a href="?page={{ data.previous_page_number }}" class="btn btn-outline-primary">Previous</a>
+                    {% endif %}
+                    {% if data.paginator.num_pages %}
+                    <span class="mx-2">Page {{ data.number }} of {{ data.paginator.num_pages }}</span>
+                    {% endif %}
+                    {% if data.has_next %}
+                        <a href="?page={{ data.next_page_number }}" class="btn btn-outline-primary">Next</a>
+                    {% endif %}
+                </div>
+                {% if messages %}
+                    <div id="message" class="alert alert-info mt-3">{{ messages }}</div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+
+<script>
+    const toggleButton = document.getElementById('toggle-sidenav');
+const closeButton = document.getElementById('close-sidenav');
+const sidenav = document.getElementById('sidenav');
+
+toggleButton.addEventListener('click', () => {
+    sidenav.classList.toggle('open');
+});
+
+closeButton.addEventListener('click', () => {
+    sidenav.classList.remove('open');
+});
+
+</script>
+
+    
+</body>
+</html>

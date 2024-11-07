@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://kit.fontawesome.com/e4ecc635a0.js" crossorigin="anonymous"></script>
+
+{% load static %}
+    <style>
+        body {
+            font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            font-size: small;
+            margin: 0;
+        }
+        #toggle-sidenav {
+            font-size: 24px;
+            margin: 16px;
+            cursor: pointer;
+            position: absolute;
+        }
+        .sidenav {
+            width: 250px;
+            height: 100vh;
+            background-color: #333;
+            color: white;
+            position: fixed;
+            left: -250px; /* Initially hidden */
+            transition: left 0.3s;
+            z-index: 1000;
+            top:0;        }
+        .sidenav.open {
+            left: 0; /* Show the sidenav */
+        }
+        .sidenav h2 {
+            color: #fff;
+        }
+        .sidenav a {
+            color: white;
+            text-decoration: none;
+            display: block;
+            padding: 10px;
+        }
+        .sidenav a:hover {
+            background-color: #575757;
+        }
+        .main-content {
+            margin-left: 300px;
+            padding: 20px;
+            font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            font-size: small;
+            color:  rgb(33, 102, 126);
+        }
+        #butAll {
+            padding: 5px;
+            background-color: rgb(244, 222, 222);
+            border: 1px solid rgb(189, 79, 79);
+            border-radius: 5px;
+            font-size: medium;
+            color: rgb(33, 102, 126);
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        #dbTabs {
+            border-collapse: collapse;
+            width: 100%;
+            max-width: 600px;
+            margin: 20px 0;
+            border: 2px solid rgb(168, 104, 19);
+            box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.3);
+        }
+        #dbTabs th, #dbTabs td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+            color: rgb(33, 102, 126);
+        }
+        #dbTabs th {
+            background-color: rgb(189, 79, 79);
+            color: white;
+        }
+        #dbTabs tr:nth-child(even) {
+            background-color: rgb(244, 222, 222);
+            
+        }
+        #dbTabs tr:hover {
+            background-color: #ddd;
+        }
+        .action-links a {
+            color: rgb(33, 102, 126);
+            text-decoration: none;
+            margin: 0 10px;
+        }
+        .action-links a:hover {
+            text-decoration: underline;
+        }
+        #message{
+            margin-left: 300px;
+            color: rgb(33, 102, 126);
+        }
+        @media (max-width: 768px) {
+                .sidenav {
+                    left: -250px; /* Hide offscreen */
+                }
+                .sidenav.open {
+                    left: 0; /* Show when opened */
+                }
+                .main-content {
+                    margin-left: 0; /* No space for sidenav */
+                    padding: 20px;
+                }
+ 	
+            }
+            @media (min-width: 768px) {
+                #toggle-sidenav {
+                    display: none; /* Hide button on larger screens */
+                }
+                .sidenav {
+                    left: 0; /* Show sidenav on larger screens */
+                }
+                .main-content {
+                    margin-left: 260px; /* Adjust for larger screens */
+                }
+            }
+    </style>
+</head>
+<body>
+    <button id="toggle-sidenav" aria-label="Toggle navigation">☰</button>
+    <div id="sidenav" class="sidenav ">
+        <h2>Broadway Admin</h2><hr/>
+        <a href="{% url 'doctorss' %}"><i class="fa-solid fa-user-doctor"></i>&nbsp; Doctors</a>
+        <a href="{% url 'hospitals' %}"><i class="fa-solid fa-hospital"></i>&nbsp; Hospitals</a>
+        <a href="{% url 'specializations' %}"><i class="fa-solid fa-clinic-medical"></i>&nbsp; Departments</a>
+        <a href="{% url 'timeslots' %}"><i class="fa-solid fa-clock"></i>&nbsp; Timeslots</a>
+        <a href="{% url 'appointments' %}"><i class="fa-solid fa-calendar-check"></i>&nbsp; Appointments</a>
+        <a href="{% url 'reminders' %}"><i class="fa-solid fa-bell"></i>&nbsp; Reminders</a><hr/>
+        <a href="{% url 'adminlogin' %}"><i class="fa-solid fa-sign-out-alt"></i>&nbsp;Logout</a><hr/>
+        <button id="close-sidenav" style="background: none; border: none; color: white; font-size: 24px; cursor: pointer;" aria-label="Close navigation">✖</button>
+    </div>
+        <div class="main-content">
+        <div style="margin-bottom: 20px; float:inline-end;">
+            <button id="butAll" type="button"><a href="{% url 'addModSpecialization' %}" style="color: inherit; text-decoration: none;"><b>ADD</b></a></button>
+            <button id="butAll" type="button"><a href="{% url 'doctorAdminHome' %}" style="color: inherit; text-decoration: none;"><b>Back</b></a></button>
+        </div>        
+        {% if data %}
+        <table id="dbTabs">
+            <thead>
+                <tr><th colspan="2">Departments Registered</th></tr>
+                <tr>
+                    <th>Name</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for d in data %}
+                <tr>
+                    <td>{{d.name}}</td> 
+                    <td class="action-links">
+                        <a href="{% url 'modifySpecial' d.id %}">Modify</a>
+                        <a href="{% url 'deleteSpecial' d.id %}">Delete</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table> 
+        {% elif messages %}
+        <div>{{messages}}</div>
+        {% endif %}
+    </div>
+    <script>
+        const toggleButton = document.getElementById('toggle-sidenav');
+        const closeButton = document.getElementById('close-sidenav');
+        const sidenav = document.getElementById('sidenav');
+
+        toggleButton.addEventListener('click', () => {
+            sidenav.classList.toggle('open');
+        });
+
+        closeButton.addEventListener('click', () => {
+            sidenav.classList.remove('open');
+        });
+    </script>
+
+    
+</body>
+</html>

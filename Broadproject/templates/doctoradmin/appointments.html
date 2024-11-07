@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://kit.fontawesome.com/e4ecc635a0.js" crossorigin="anonymous"></script>
+
+{% load static %}
+<style>
+    body {
+        font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        font-size: small;
+        margin: 0;
+        padding: 0;
+    }
+    #hdiv {
+        max-width: 600px;
+        margin: auto;
+        border: 2px solid brown;
+        border-radius: 5px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        padding: 20px;
+    }
+    #head {
+        background-color: brown;
+        padding: 10px;
+        color: white;  
+        text-align: center;  
+        border-radius: 5px;
+    }
+    .action-buttons {
+        display: flex;
+        flex-direction: column; /* Stack buttons vertically */
+        margin-top: 20px;
+    }
+    .action-button {
+        padding: 10px;
+        background-color: rgb(244, 222, 222);
+        border: 1px solid rgb(189, 79, 79);
+        border-radius: 5px;
+        font-size: medium;
+        color: rgb(33, 102, 126);
+        text-align: center;
+        text-decoration: none;
+        margin-bottom: 10px; /* Space between buttons */
+    }
+    .action-button:hover {
+        background-color: rgb(189, 79, 79);
+        color: white;
+    }
+    #toggle-sidenav {
+            font-size: 24px;
+            margin: 16px;
+            cursor: pointer;
+        }
+        .sidenav {
+            width: 250px;
+            height: 100vh;
+            background-color: #333;
+            color: white;
+            position: fixed;
+            left: -250px; /* Initially hidden */
+            transition: left 0.3s;
+            z-index: 1000;
+            top:0;     
+            font-size: small;  
+         }
+        .sidenav.open {
+            left: 0; /* Show the sidenav */
+        }
+        .sidenav h2 {
+            color: #fff;
+        }
+        .sidenav a {
+            color: white;
+            text-decoration: none;
+            display: block;
+            padding: 10px;
+        }
+        .sidenav a:hover {
+            background-color: #575757;
+        }
+    .main-content {
+        margin-left: 200px;
+        padding: 20px;
+        transition: margin-left 0.3s; /* Smooth transition */
+    }
+    @media (max-width: 768px) {
+        .sidenav {
+            left: -250px; /* Hide offscreen */
+        }
+        .sidenav.open {
+            left: 0; /* Show when opened */
+        }
+        .main-content {
+            margin-left: 0; /* No space for sidenav */
+            padding: 20px;
+        }
+        .action-buttons {
+            flex-direction: column; /* Stack buttons vertically on smaller screens */
+        }
+    }
+    @media (min-width: 768px) {
+        #toggle-sidenav {
+            display: none; /* Hide button on larger screens */
+        }
+        .sidenav {
+            left: 0; /* Show sidenav on larger screens */
+        }
+        .action-buttons {
+            flex-direction: row; /* Align buttons in a row on larger screens */
+        }
+        .action-button {
+            margin-bottom: 0; /* Remove bottom margin on larger screens */
+            margin-right: 10px; /* Add space between buttons */
+        }
+    }
+</style>
+
+</head>
+<body>
+    <button id="toggle-sidenav" aria-label="Toggle navigation">☰</button>
+    <div id="sidenav" class="sidenav ">
+        <h2>Broadway Admin</h2><hr/>
+        <a href="{% url 'doctorss' %}"><i class="fa-solid fa-user-doctor"></i>&nbsp; Doctors</a>
+        <a href="{% url 'hospitals' %}"><i class="fa-solid fa-hospital"></i>&nbsp; Hospitals</a>
+        <a href="{% url 'specializations' %}"><i class="fa-solid fa-clinic-medical"></i>&nbsp; Departments</a>
+        <a href="{% url 'timeslots' %}"><i class="fa-solid fa-clock"></i>&nbsp; Timeslots</a>
+        <a href="{% url 'appointments' %}"><i class="fa-solid fa-calendar-check"></i>&nbsp; Appointments</a>
+        <a href="{% url 'reminders' %}"><i class="fa-solid fa-bell"></i>&nbsp; Reminders</a><hr/>
+        <a href="{% url 'adminlogin' %}"><i class="fa-solid fa-sign-out-alt"></i>&nbsp;Logout</a><hr/>
+        <button id="close-sidenav" style="background: none; border: none; color: white; font-size: 24px; cursor: pointer;" aria-label="Close navigation">✖</button>
+    </div>
+<div class="main-content">
+    <div id="hdiv">
+        <div id="head">
+            <h2>Appointments</h2> <!-- Added heading for context -->
+        </div>
+        <div class="action-buttons">
+            <a href="{% url 'getDocTimeForAppoint' %}" class="action-button"><b>Create an Appointment</b></a>
+            <a href="{% url 'dispAppointments' %}" class="action-button"><b>View Appointment</b></a>
+            <a href="{% url 'doctorAdminHome' %}" class="action-button"><b>Back</b></a>
+        </div>
+    </div>
+</div>
+
+<script>
+    const toggleButton = document.getElementById('toggle-sidenav');
+    const closeButton = document.getElementById('close-sidenav');
+    const sidenav = document.getElementById('sidenav');
+
+    toggleButton.addEventListener('click', () => {
+        sidenav.classList.toggle('open');
+    });
+
+    closeButton.addEventListener('click', () => {
+        sidenav.classList.remove('open');
+    });
+</script>
+</body>
+</html>

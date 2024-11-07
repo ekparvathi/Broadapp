@@ -1,0 +1,36 @@
+{% extends 'doctorAdmin/base.html' %}
+{% block title %}Broadway Admin Password Change{% endblock %}
+{% block body %}
+{% load static %}
+    <link rel="stylesheet" href="{% static 'adminpage.css' %}"><br/>
+    <link rel="stylesheet" href="{% static 'css2.css' %}">
+    {% if messages %}
+    {% for message in messages %}
+    {{message}}
+    {% endfor %}
+    {% endif %}
+    <form method="POST" style="margin-top: 100px;margin-left: 400px; background-color: lightblue;width: 400px;height: fit-content;border: 5px solid darkblue;border-style: double;">
+        {% if user.is_authenticated %}
+        {% csrf_token %}
+        <br/>
+        <div  style="text-align: center;">
+            <label for="" style="font-size: large; font-family: 'Courier New', Courier, monospace;font-weight: bold;">BroadWay Admin Password Change<hr style="border-color: darkblue;"></label>
+        </div>        
+        <br/><br/>
+        <div style="display: flex;">
+            <label for="" style="width: 175px;margin-left: 20px;font-family: 'Courier New', Courier, monospace;">New Password</label><label>:</label>
+            <input type="password" name="newpwd">
+        </div>
+        <br/><br/>
+        <div style="display: flex;">
+            <label for="" style="width: 175px;margin-left: 20px;font-family: 'Courier New', Courier, monospace;">Confirm Password</label><label>:</label>
+            <input type="password" name="cpwd">
+        </div>
+        <br/><br/>
+        <div style="display: flex; align-items: flex-end;">
+            <button type="submit" style="width: 200px;height: 30px; border: 2px solid darkblue;font-family: 'Courier New', Courier, monospace; background-color: lightblue;border-radius: 50px;border-style: double; margin-left: 100px;font-size: medium;">Change Password</button>
+        </div>
+        <br/><br/>
+        {% endif %}
+    </form>
+{% endblock %}

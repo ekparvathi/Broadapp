@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add a Doctor</title>
+    <script src="https://kit.fontawesome.com/e4ecc635a0.js" crossorigin="anonymous"></script>
+<script>
+    function previewImage() {
+        var file = document.getElementById('profile_pic').files[0];
+        var reader = new FileReader();
+        reader.onloadend = function () {
+            var imgPreview = document.getElementById('pPic');
+            imgPreview.src = reader.result;
+            imgPreview.style.display = 'block';
+        }
+        
+        if (file) {
+            reader.readAsDataURL(file);
+        } else {
+            imgPreview.src = "";
+        }
+    }
+</script>
+<style>
+    body {
+        font-family: 'Gill Sans', 'Gill Sans MT', 'Calibri', 'Trebuchet MS', sans-serif;
+        font-size: small;
+        margin: 0;
+        padding: 0;
+        color: rgb(33, 102, 126);
+    }
+    #toggle-sidenav {
+            font-size: 24px;
+            margin: 16px;
+            cursor: pointer;
+        }
+        .sidenav {
+            width: 250px;
+            height: 100vh;
+            background-color: #333;
+            color: white;
+            position: fixed;
+            left: -250px; /* Initially hidden */
+            transition: left 0.3s;
+            z-index: 1000;
+            top:0;     
+            font-size: small;  
+         }
+        .sidenav.open {
+            left: 0; /* Show the sidenav */
+        }
+        .sidenav h2 {
+            color: #fff;
+        }
+        .sidenav a {
+            color: white;
+            text-decoration: none;
+            display: block;
+            padding: 10px;
+        }
+        .sidenav a:hover {
+            background-color: #575757;
+        }
+        .main-content {
+            margin-left: 300px; /* Space for the sidenav */
+            padding: 20px;
+            /* margin-top: 50px; */
+        }
+    #hdiv {
+        width: 400px;
+        border: 1px brown inset;
+        border-radius: 5px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); 
+        margin: auto;
+        padding: 20px;
+        height: fit-content;
+    }
+    #head {
+        background-color: brown;
+        padding: 8px;
+        color: white;  
+        text-align: center;  
+    }
+    .form-group{
+        display:grid;
+    }
+    label {
+        width: 200px;
+        margin-right: 50px;
+    }
+    input[type="text"],[type="email"],[type="password"],  textarea {
+        width: 300px;
+        padding: 8px;
+        margin-top: 3px;
+        align-self: self-end;
+    }
+    select{
+        width: 320px;
+        padding: 8px;
+        margin-top: 3px;
+        align-self: self-end;
+    }
+    #pPic {
+        width: 75px;
+        height: 70px;
+        display: none;
+    }
+    #butAll {
+        padding: 5px;
+        background-color: rgb(244, 222, 222);
+        border-radius: 5px;
+        border: 1px solid rgb(189, 79, 79);
+        color: rgb(33, 102, 126);
+        cursor: pointer;
+        font-size: medium;
+    }
+    #actionLinks a {
+        color: rgb(33, 102, 126);
+        text-decoration: none;
+        margin-left: 20px;
+    }
+    #actionLinks a:hover {
+        text-decoration: underline;
+    }
+    #message{
+        margin-left: 300px;
+        color: rgb(33, 102, 126);
+    }
+    .scrollable-container {
+    max-height: 80vh; /* Adjust as needed */
+    overflow-y: auto; /* Enable vertical scrolling */
+    border: 1px solid #ccc; /* Optional: adds a border for visual separation */
+    padding: 20px; /* Optional: add some padding */
+    border-radius: 5px; /* Optional: round the corners */
+    background-color: #fff; /* Ensure a white background */
+}
+
+    /* Responsive Styles */
+    @media (max-width: 768px) {
+            .sidenav {
+                left: -270px; /* Hide offscreen */
+            }
+            .sidenav.open {
+                left: 0; /* Show when opened */
+            }
+            .main-content {
+                margin-left: -30px; /* No space for sidenav */
+            }
+        }
+        @media (min-width: 768px) {
+            #toggle-sidenav {
+                display: none; /* Hide button on larger screens */
+            }
+            .sidenav {
+                left: 0; /* Show sidenav on larger screens */
+            }
+            .main-content{
+                /* margin-left: 300px; */
+                margin-top: -10px;
+            }
+        }
+
+</style>
+</head>
+<body>
+    <button id="toggle-sidenav" aria-label="Toggle navigation">☰</button>
+    <div id="sidenav" class="sidenav ">
+        <h2>Broadway Admin</h2><hr/>
+        <a href="{% url 'doctorss' %}"><i class="fa-solid fa-user-doctor"></i>&nbsp; Doctors</a>
+        <a href="{% url 'hospitals' %}"><i class="fa-solid fa-hospital"></i>&nbsp; Hospitals</a>
+        <a href="{% url 'specializations' %}"><i class="fa-solid fa-clinic-medical"></i>&nbsp; Departments</a>
+        <a href="{% url 'timeslots' %}"><i class="fa-solid fa-clock"></i>&nbsp; Timeslots</a>
+        <a href="{% url 'appointments' %}"><i class="fa-solid fa-calendar-check"></i>&nbsp; Appointments</a>
+        <a href="{% url 'reminders' %}"><i class="fa-solid fa-bell"></i>&nbsp; Reminders</a><hr/>
+        <a href="{% url 'adminlogin' %}"><i class="fa-solid fa-sign-out-alt"></i>&nbsp;Logout</a><hr/>
+        <button id="close-sidenav" style="background: none; border: none; color: white; font-size: 24px; cursor: pointer;" aria-label="Close navigation">✖</button>
+    </div>
+    <div class="container main-content">
+        <div class="row justify-content-center mb-4" id="hdiv">
+            <div class="col-12 col-md-8 scrollable-container"> <!-- Add scrollable-container class -->
+                <h2 id="head">Add Doctors</h2>
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    
+                    <div class="form-group">
+                        <label for="profile_pic">Profile Picture:</label>
+                        <div class="mb-2">
+                            <img src="" alt="profile_pic" id="pPic" class="img-fluid" style="max-width: 200px;">
+                        </div>
+                        <input type="file" id="profile_pic" name="profile_pic" class="form-control" onchange="previewImage()" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="name">Name:</label>
+                        <input type="text" id="name" name="name" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">Email:</label>
+                        <input type="email" id="email" name="email" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="password">Password:</label>
+                        <input type="password" id="password" name="password" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="qualification">Qualification:</label>
+                        <input type="text" id="qualification" name="qualification" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="selectHosp">Hospital:</label>
+                        <select name="selectHosp" id="selectHosp" class="form-control" required>
+                            <option value="" selected disabled>Select a Hospital</option>
+                            {% for h in hosp %}
+                                <option value="{{ h.id }}">{{ h.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="selectSpecial">Specialization:</label>
+                        <select name="selectSpecial" id="selectSpecial" class="form-control" required>
+                            <option value="" selected disabled>Select Specialization</option>
+                            {% for s in special %}
+                                <option value="{{ s.id }}">{{ s.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="lat">District:</label>
+                        <input type="text" id="district" name="district" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="long">Location:</label>
+                        <input type="text" id="location" name="location" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="descri">Description:</label>
+                        <textarea id="descri" name="descri" class="form-control" rows="3" required></textarea>
+                    </div>
+                    <br/>
+                    <div class="d-flex justify-content-between mt-3">
+                        <button id="butAll" type="submit" class="btn btn-primary">Add</button>
+                        <a id="butAll" href="{% url 'doctorss' %}" class="btn btn-secondary">Back</a>
+                    </div>
+                </form>
+                
+                <div id="message" class="mt-3">
+                    {% if messages %}
+                        <div class="alert alert-info">{{ messages }}</div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+<script>
+    const toggleButton = document.getElementById('toggle-sidenav');
+    const closeButton = document.getElementById('close-sidenav');
+    const sidenav = document.getElementById('sidenav');
+
+    toggleButton.addEventListener('click', () => {
+        sidenav.classList.toggle('open');
+    });
+
+    closeButton.addEventListener('click', () => {
+        sidenav.classList.remove('open');
+    });
+</script>    
+</body>
+</html>

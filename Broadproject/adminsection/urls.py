@@ -1,0 +1,42 @@
+from django.urls import path
+from adminsection import views
+urlpatterns = [
+    path('createadmin/',views.createadmin,name='createadmin'),
+    path('login/',views.adminlogin,name='adminlogin'),
+    path('home/',views.adminhome,name='home'),
+    path('restodata/',views.restaurantdashbord,name='restaurantdata'),
+    path('deleterestaurant/<int:id>',views.deleterestaurant,name='delete'),
+    path('viewdata/<int:id>',views.viewrestaurantdata,name='view'),
+    path('rating/<int:id>',views.rating,name='rating'),
+    path('viewmenu/<int:id>',views.restaurantmenu,name='viewmenu'),
+    path('orderhistory/<int:id>',views.orderhistory,name='orderhistory'),
+    path('userinfo/',views.userinfo,name='userinfo'),
+    path('viewuser/<int:id>',views.viewuser,name='viewuser'),
+    path('deleteuser/<int:id>',views.deleteuser,name='deleteuser'),
+    path('deliveryfee/',views.deliveryfee,name='deliveryfee'),
+    path('adminindex/',views.adminindex,name='adminindex'),
+    path('adminrestau/',views.admin_restaurant,name="adminrestaurant"),
+    path('getdeliveryfee/',views.getdeliveryfee,name="getdeliveryfee"),
+    path('update-deliveryfee/', views.update_delivery_fee, name='update_deliveryfee'),
+    path('deletedelivery/<int:id>',views.removedeliveryfee,name="deletedelivery"),
+    path('totalorder/',views.totalorders,name="totalorder"),
+    path('fullmenu/',views.fullmenu,name="fullmenu"),
+    path('categories/',views.categories,name="categories"),
+    path('categorysearch/<int:id>',views.viewbycategory,name="viewbycategory"),
+    path('userdash/',views.totalusers,name="userdashboard"),
+    path('forgotpassword/',views.forgotpass,name="forgotpassword"),
+    path('promotions/',views.promodata,name="promotions"),
+    path('updateadmin/',views.updateadmin,name="updateadmin"),
+    path('createfoodmanager/',views.createfoodboss,name="createfoodboss"),
+    path('choosemanager/',views.managerLogin,name="choosemanager"),
+    path('foodbosslogin/',views.foodbosslogin,name="foodbosslogin"),
+    path('createjobmanager/',views.createjobboss,name="createjobboss"),
+    path('jobbosslogin/',views.jobbosslogin,name="jobbosslogin"),
+    path('buysell-manager-create/',views.createbuysellManager,name="buysell-manager-create"),
+    path('buysell-manager-login/',views.buysellManagerLogin,name="buysell-manager-login"),
+    # path('forgotpassword_buysel_managers/',views.forgotpass_buysell_managers,name="forgotpassword_buysell"),
+    path('revenue_calculation/',views.revenue_calcu,name='revenue_data'),
+    path('received_online_payment/',views.online_payment_received,name="razorpay_payment")
+
+   
+]

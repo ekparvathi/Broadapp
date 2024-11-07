@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Doctor Admin</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <form method="POST" class="mx-auto bg-dark text-white p-4 border border-primary rounded" style="max-width: 400px;">
+            {% csrf_token %}
+            <div class="text-center mb-3">
+                <label class="h4 font-weight-bold">Create Doctor Admin</label>
+                <hr class="bg-primary">
+            </div>
+
+            <div class="form-group">
+                <input type="text" name="name" required class="form-control" placeholder="Name">
+            </div>
+
+            <div class="form-group">
+                <input type="text" name="email" required class="form-control" placeholder="Email">
+            </div>
+
+            <div class="form-group">
+                <input type="password" name="password" required class="form-control" placeholder="Password">
+            </div>
+
+            <div class="form-group">
+                <input type="password" name="cpassword" required class="form-control" placeholder="Re-enter Password">
+            </div>
+
+            <div class="text-center">
+                <button type="submit" class="btn btn-success btn-block">Create</button>
+                <hr class="bg-primary">
+            </div>
+
+            <div class="text-center">
+                <a href="{% url 'docManagerLogin' %}" class="text-white">Login</a>
+            </div>
+        </form>
+
+        <br/>
+        {% if messages %}
+            <div class="alert alert-danger">
+                {% for message in messages %}
+                    {{ message }}
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

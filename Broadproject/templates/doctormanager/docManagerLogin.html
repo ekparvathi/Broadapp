@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Manager Login</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <form method="POST" class="mx-auto bg-dark text-white p-4 border border-primary rounded" style="max-width: 400px;">
+            {% csrf_token %}
+            <div class="text-center mb-3">
+                <label class="h4 font-weight-bold">Manager Login</label>
+                <hr class="bg-primary">
+            </div>
+
+            <div class="form-group">
+                <label for="username">Email</label>
+                <input type="text" name="email" class="form-control" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" name="password" class="form-control" required>
+            </div>
+
+            <div class="text-center">
+                <button type="submit" class="btn btn-success btn-block ">Login</button>
+                <hr class="bg-primary">
+            </div>
+
+            <div class="d-flex justify-content-between">
+                <a href="{% url 'createDocManager' %}" class="text-white">Sign Up</a>
+                <a href="{% url 'forgot_password_managers' %}" class="text-white">Forgot Password?</a>
+            </div>
+            {% if messages %}
+                <div class="alert alert-danger">{{ messages }}</div>
+            {% endif %}
+        </form>
+
+        <br/>
+        
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

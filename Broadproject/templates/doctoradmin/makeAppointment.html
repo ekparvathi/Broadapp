@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Make Appointment</title>
+    <script src="https://kit.fontawesome.com/e4ecc635a0.js" crossorigin="anonymous"></script>
+
+{% load static %}
+   
+   <script>
+    function previewImage() {
+        var file = document.getElementById('profile_pic').files[0]; // Get the selected file
+        var reader = new FileReader();
+        console.log(file)
+        reader.onloadend = function () {
+            // Display the image preview
+            var imgPreview = document.getElementById('pPic');
+            console.log(imgPreview)
+            imgPreview.src = reader.result;
+            imgPreview.style.display = 'block'; // Show the image preview
+        }
+        
+        if (file) {
+            reader.readAsDataURL(file); // Read the file as Data URL
+        } else {
+            imgPreview.src = ""; // Clear the image preview
+        }
+    }
+   </script>
+   <style>
+    body {
+        font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        font-size: small;
+        color: rgb(33, 102, 126);
+        margin: 0;
+    }
+    #hdiv {
+        width: 355px;
+        border: 1px brown;
+        border-style: inset;
+        border-radius: 5px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        /* margin: 20px auto; */
+    }
+    #head {
+        background-color: brown;
+        padding: 10px;
+        color: white;
+        text-align: center;
+    }
+#hdiv1{
+    text-align: left;
+    align-items:flex-start;
+    font-size: small;
+    display: flex;
+    margin-left: 10px;
+    color: rgb(33, 102, 126);
+}
+
+#hdiv2{
+    display: flex;
+    margin-left: 200px;
+}
+#butAll{
+    padding: 5px;
+    margin-right: 5px;
+    background-color: rgb(244, 222, 222);
+    border-radius: 5px;
+    border-color:rgb(189, 79, 79);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); 
+    border-width: 1px;
+    font-size: medium;
+    color: rgb(33, 102, 126);
+    width: fit-content;
+}
+
+
+a:link {
+    color: rgb(33, 102, 126);
+    text-decoration: none;
+    padding: 5px;
+}  
+  /* visited link */
+a:visited {
+    color: rgb(33, 102, 126);
+    text-decoration: none;
+    padding: 5px;
+}  
+  /* mouse over link */
+a:hover {
+    color:rgb(33, 102, 126);
+    text-decoration: none;
+    padding: 5px;
+}  
+  /* selected link */
+a:active {
+    color: rgb(33, 102, 126);
+    text-decoration: none;
+    padding: 5px;
+} 
+.row{
+    padding: 10px;
+}
+#toggle-sidenav {
+            font-size: 24px;
+            margin: 16px;
+            cursor: pointer;
+        }
+        .sidenav {
+            width: 250px;
+            height: 100vh;
+            background-color: #333;
+            color: white;
+            position: fixed;
+            left: -250px; /* Initially hidden */
+            transition: left 0.3s;
+            z-index: 1000;
+            top:0;     
+            font-size: small;  
+         }
+        .sidenav.open {
+            left: 0; /* Show the sidenav */
+        }
+        .sidenav h2 {
+            color: #fff;
+        }
+        .sidenav a {
+            color: white;
+            text-decoration: none;
+            display: block;
+            padding: 10px;
+        }
+        .sidenav a:hover {
+            background-color: #575757;
+        }
+            input{
+                width: 300px;
+                padding: 8px;  
+            }
+            label{
+                width: 200px;
+                padding: 8px;
+            }
+    .main-content {
+        margin-left: 0px;
+        padding: 20px;
+        flex-grow: 1;
+    }
+    .error {
+            color: red;
+        }
+    @media (max-width: 768px) {
+                .sidenav {
+                    left: -250px; /* Hide offscreen */
+                }
+                .sidenav.open {
+                    left: 0; /* Show when opened */
+                }
+                .main-content {
+                    margin-left: 0; /* No space for sidenav */
+                    padding: 20px;
+                }
+ 	
+            }
+            @media (min-width: 768px) {
+                #toggle-sidenav {
+                    display: none; /* Hide button on larger screens */
+                }
+                .sidenav {
+                    left: 0; /* Show sidenav on larger screens */
+                    width: 240px;
+                }
+                .main-content{margin-left: 270px;}
+            }
+
+
+ </style>
+ 
+</head>
+<body>
+    <button id="toggle-sidenav" aria-label="Toggle navigation">☰</button>
+    <div id="sidenav" class="sidenav ">
+        <h2>Broadway Admin</h2><hr/>
+        <a href="{% url 'doctorss' %}"><i class="fa-solid fa-user-doctor"></i>&nbsp; Doctors</a>
+        <a href="{% url 'hospitals' %}"><i class="fa-solid fa-hospital"></i>&nbsp; Hospitals</a>
+        <a href="{% url 'specializations' %}"><i class="fa-solid fa-clinic-medical"></i>&nbsp; Departments</a>
+        <a href="{% url 'timeslots' %}"><i class="fa-solid fa-clock"></i>&nbsp; Timeslots</a>
+        <a href="{% url 'appointments' %}"><i class="fa-solid fa-calendar-check"></i>&nbsp; Appointments</a>
+        <a href="{% url 'reminders' %}"><i class="fa-solid fa-bell"></i>&nbsp; Reminders</a><hr/>
+        <a href="{% url 'adminlogin' %}"><i class="fa-solid fa-sign-out-alt"></i>&nbsp;Logout</a><hr/>
+        <button id="close-sidenav" style="background: none; border: none; color: white; font-size: 24px; cursor: pointer;" aria-label="Close navigation">✖</button>
+    </div>
+    <div class="container-fluid main-content">
+        <div id="hdiv">
+            <div id="head" class="row">
+                <div class="col text-center">
+                    <h2>Make Appointment</h2>
+                </div>
+            </div>
+            <br/>
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="appDoc">Doctor Name:</label>
+                        <input type="text" id="appDoc" name="appDoc" class="form-control" value="{{slot.timeForDoc}}" disabled>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="slotTime">Time Slot:</label>
+                        <input type="text" id="slotTime" name="slotTime" class="form-control" value="{{slot.start_time}}-{{slot.end_time}}" disabled>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="appPatient">Patient Name:</label>
+                        <input type="text" name="appPatient" id="appPatient" class="form-control" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="appEmail">Patient Email:</label>
+                        <input type="email" name="appEmail" id="appEmail" class="form-control" onchange="validateEmail()" required placeholder="Enter email">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="appContact">Patient Contact:</label>
+                        <input type="text" id="appContact" name="appContact" class="form-control" onchange="checkPhoneNumber()" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="appAge">Patient Age:</label>
+                        <input type="text" id="appAge" name="appAge" class="form-control" required>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="appGender">Patient Gender:</label>
+                        <input type="text" id="appGender" name="appGender" class="form-control" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="appAddress">Patient Address:</label>
+                        <input type="text" id="appAddress" name="appAddress" class="form-control" required>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col text-center">
+                        <button id="butAll" type="submit" class="btn btn-primary">Set Appointment</button>
+                        <a id="butAll"  href="{% url 'getDocTimeForAppoint' %}" class="btn btn-secondary">Back</a>
+                    </div>
+                </div>
+            </form>
+            <div id="message" class="error mt-3">
+                {% if messages %}
+                    <div >{{ messages }}</div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+   <script>
+    const toggleButton = document.getElementById('toggle-sidenav');
+    const closeButton = document.getElementById('close-sidenav');
+    const sidenav = document.getElementById('sidenav');
+
+    toggleButton.addEventListener('click', () => {
+        sidenav.classList.toggle('open');
+    });
+
+    closeButton.addEventListener('click', () => {
+        sidenav.classList.remove('open');
+    });
+
+    function validateEmail() {
+            const emailInput = document.getElementById('appEmail').value;
+            const messageDiv = document.getElementById('message');
+
+            // Regular expression for validating an email address
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+            // Check if the input matches the regex
+            if (emailRegex.test(emailInput)) {
+                // messageDiv.textContent = "Success: Valid email address.";
+                // messageDiv.className = "success";
+            } else {
+                messageDiv.textContent = "Error: Invalid email address.";
+                messageDiv.className = "error";
+            }
+        }
+    function checkPhoneNumber() {
+            const phoneInput = document.getElementById('appContact').value;
+            const messageDiv = document.getElementById('message');
+            const phoneRegex = /^\d{10}$/;
+            // Assuming a valid phone number length is 10 digits
+            if (phoneRegex.test(phoneInput)) {
+                // messageDiv.textContent = "Success: Valid phone number.";
+                // messageDiv.className = "success";
+            } else {
+                messageDiv.textContent = "Error: Invalid phone number. Must be 10 digits.";
+                messageDiv.className = "error";
+            }
+
+    }    
+</script>
+    
+</body>
+</html>

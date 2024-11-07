@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Home</title>
+    <script src="https://kit.fontawesome.com/e4ecc635a0.js" crossorigin="anonymous"></script>
+    {% load static %}
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+{% if current_user %}
+{% load static %}
+    
+        <style>
+            body {
+                font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+                font-size: small;
+                margin: 0;
+            }
+            #toggle-sidenav {
+                font-size: 24px;
+                margin: 16px;
+                cursor: pointer;
+            }
+            .sidenav {
+                width: 250px;
+                height: 100vh;
+                background-color: #333;
+                color: white;
+                padding: 20px;
+                top: 0;
+                position: fixed;
+                left: -250px; /* Initially hidden */
+                transition: left 0.3s;
+                z-index: 1000;
+            }
+            .sidenav.open {
+                left: 0; /* Show the sidenav */
+            }
+            .sidenav h2 {
+                color: #fff;
+            }
+            .sidenav a {
+                color: white;
+                text-decoration: none;
+                display: block;
+                padding: 10px;
+            }
+            .sidenav a:hover {
+                background-color: #575757;
+            }
+            .main-content {
+                margin-left: 260px; /* Space for the sidenav */
+                padding: 20px;
+            }
+            #basDiv {
+                width: fit-content;
+                border-radius: 5px;
+                margin-left: 150px;
+                padding: 20px;
+            }
+            .button {
+                border: 1px solid brown;
+                width: 200px;
+                /* height: 70px; */
+                padding: 30px;
+                font-size: large;
+                margin-top: 10px;
+                border-radius: 5px;
+                box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.3);
+                text-align: center;
+                text-decoration: none;
+                display: inline-block;
+                color: rgb(33, 102, 126);
+                background-color: rgb(244, 222, 222);
+            }
+            .button:hover {
+                background-color: #575757;
+                color: white;
+            }
+            @media (max-width: 768px) {
+                .sidenav {
+                    left: -250px; /* Hide offscreen */
+                }
+                .sidenav.open {
+                    left: 0; /* Show when opened */
+                }
+                .main-content {
+                    margin-left: -200px; /* No space for sidenav */
+                    padding: 20px;
+                }
+            }
+            @media (min-width: 768px) {
+                #toggle-sidenav {
+                    display: none; /* Hide button on larger screens */
+                }
+                .sidenav {
+                    left: 0; /* Show sidenav on larger screens */
+                }
+            }
+        </style>
+        </head>
+        <body>
+    <button id="toggle-sidenav">☰</button>
+    <div id="sidenav" class="sidenav">
+        <h4> Welcome, {{current_user}}</h4>
+        <hr class="custom-hr"/>
+        <a href="{% url 'doctorProfile' %}"><i class="fas fa-user"></i>&nbsp; Profile</a>
+        <a href="{% url 'doctorCreateTimeslot' %}"><i class="fas fa-clock"></i>&nbsp; Add New Timeslot</a>
+        <a href="{% url 'doctorDispTimeslot' %}"><i class="fas fa-calendar-alt"></i>&nbsp; View Timeslots</a>
+        <a href="{% url 'doctorAppointments' %}"><i class="fas fa-list-alt"></i>&nbsp; Appointments</a>
+        <a href="{% url 'startOP' %}"><i class="fas fa-stethoscope"></i>&nbsp; Start OP</a>
+        <hr class="custom-hr"/>
+        <a href="{% url 'doctorChangePwd' %}"><i class="fas fa-key"></i> Change Password</a>
+        <hr class="custom-hr"/>
+        <a href="{% url 'doctorLogin' %}"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        <hr class="custom-hr"/>
+        <button id="close-sidenav" aria-label="Close navigation" style="background: none; border: none; color: white; font-size: 24px; cursor: pointer;">✖</button>
+    </div>
+        <div class="main-content">
+            <div id="basDiv">
+                <ul>
+                    <li><a class="button" href="{% url 'doctorProfile' %}"><strong>Profile</strong></a></li>
+                    <li><a class="button" href="{% url 'doctorCreateTimeslot' %}"><strong>Add New TimeSlot</strong></a></li>
+                    <li><a class="button" href="{% url 'doctorDispTimeslot' %}"><strong>View TimeSlots</strong></a></li>
+                    <li><a class="button" href="{% url 'doctorAppointments' %}"><strong>Appointments</strong></a></li>
+                    <li><a class="button" href="{% url 'startOP' %}"><strong>Start OP</strong></a></li>
+                </ul>
+            </div>
+            {% if messages %}
+            {{ messages }}
+            {% endif %}
+        </div>
+        
+               
+    
+        <script>
+            const toggleButton = document.getElementById('toggle-sidenav');
+            const closeButton = document.getElementById('close-sidenav');
+            const sidenav = document.getElementById('sidenav');
+    
+            toggleButton.addEventListener('click', () => {
+                sidenav.classList.toggle('open');
+            });
+    
+            closeButton.addEventListener('click', () => {
+                sidenav.classList.remove('open');
+            });
+        </script>
+            
+        </body>
+    {% endif %}
+        </html>

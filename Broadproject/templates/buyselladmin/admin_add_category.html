@@ -1,0 +1,48 @@
+{% extends 'buyselladmin/admin_base.html' %}
+
+{% block content %}
+<html>
+
+<head>
+    <style>
+        h2 {
+            margin-top: 45px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <h2 style="margin-left: 80px;">Category</h2><br>
+    <hr>
+
+    <div style=" font-family:verdana; margin-left: 80px;">
+        {% if error %}
+        <p style="color: red;">{{ error }}</p>
+        {% endif %}
+    </div>
+    <div style=" font-family:verdana; margin-left: 80px;">
+        {% if messages %}
+        {% for message in messages %}
+        <p style="color: green;">{{ message }}</p>
+        {% endfor %}
+        {% endif %}
+    </div>
+    <br>
+
+    <form method="post" action="" style="margin-left: 80px;">
+        {% csrf_token %}
+
+        <label>Add Category:</label><br><br>
+        <input type="text" id="category" name="category" placeholder="Add Category" value=""
+            style="border-radius:8px;width:400px;height:35px;" required>
+        <br><br>
+
+
+        <input type="submit" value="Add"
+            style="margin-left:18%; color:white; border-radius:8px; width:100px; height:35px; background-color:#333; border:1px solid black;">
+    </form>
+</body>
+
+</html>
+{% endblock %}

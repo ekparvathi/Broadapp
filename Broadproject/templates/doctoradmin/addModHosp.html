@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://kit.fontawesome.com/e4ecc635a0.js" crossorigin="anonymous"></script>
+
+{% load static %}
+<script>
+    function previewImage() {
+        var file = document.getElementById('profile_pic').files[0];
+        var reader = new FileReader();
+        
+        reader.onloadend = function () {
+            var imgPreview = document.getElementById('pPic');
+            imgPreview.src = reader.result;
+            imgPreview.style.display = 'block';
+        }
+        
+        if (file) {
+            reader.readAsDataURL(file);
+        } else {
+            imgPreview.src = "";
+        }
+    }
+</script>
+
+<style>
+    body {
+        font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        font-size: small;
+        margin: 0;
+        padding: 0;
+    }
+    #hdiv {
+        width: 100%;
+        max-width: 450px;
+        border: 1px solid brown;
+        border-radius: 5px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        margin: 20px auto;
+        padding: 10px;
+    }
+    #hdiv1 {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+        color: rgb(33, 102, 126);
+    }
+    #hdiv1 label {
+        width: 200px;
+        margin-right: 10px;
+    }
+    #hdiv2 {
+        display: flex;
+        justify-content: space-between;
+    }
+    #butAll {
+        padding: 5px;
+        background-color: rgb(244, 222, 222);
+        border: 1px solid rgb(189, 79, 79);
+        border-radius: 5px;
+        color: rgb(33, 102, 126);
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+    #butAll:hover {
+        background-color: rgb(189, 79, 79);
+        color: white;
+    }
+    img {
+        width: 75px;
+        height: 70px;
+        display: none;
+    }
+    
+#toggle-sidenav {
+            font-size: 24px;
+            margin: 16px;
+            cursor: pointer;
+            position: absolute;
+        }
+        .sidenav {
+            width: 250px;
+            height: 100vh;
+            background-color: #333;
+            color: white;
+            position: fixed;
+            left: -250px; /* Initially hidden */
+            transition: left 0.3s;
+            z-index: 1000;
+            top:0;   
+        font-size: small;     }
+        .sidenav.open {
+            left: 0; /* Show the sidenav */
+        }
+        .sidenav h2 {
+            color: #fff;
+        }
+        .sidenav a {
+            color: white;
+            text-decoration: none;
+            display: block;
+            padding: 10px;
+        }
+        .sidenav a:hover {
+            background-color: #575757;
+        }
+    .main-content {
+        margin-left: 260px;
+        padding: 20px;
+        color: black;
+        font-size: small;
+        font-family: 'Gill Sans', 'Gill Sans MT', 'Calibri', 'Trebuchet MS', sans-serif;
+    }
+    #hdiv input,textarea{
+        width: 200px;
+        height: 30px;
+    }
+    select{
+        width: 210px;
+    }
+    #message{
+        margin-left:0px;
+        color: rgb(33, 102, 126);
+    }
+    @media (max-width: 768px) {
+                .sidenav {
+                    left: -250px; /* Hide offscreen */
+                }
+                .sidenav.open {
+                    left: 0; /* Show when opened */
+                }
+                .main-content {
+                    margin-left: -15px; /* No space for sidenav */
+                    padding: 20px;
+                }
+                #hdiv input,textarea {
+                width: 90%; /* Use full width of the container */
+                max-width: 200px; /* Set a maximum width */
+                height: 20px;
+                box-sizing: border-box; /* Include padding and border in width */
+            }
+
+            .form-group {
+                margin-bottom: 15px; /* Add some space between form groups */
+            }
+
+            }
+            @media (min-width: 768px) {
+                #toggle-sidenav {
+                    display: none; /* Hide button on larger screens */
+                }
+                .sidenav {
+                    left: 0; /* Show sidenav on larger screens */
+                    /* width: 100px; */
+                }
+                #main-content{
+                    margin-left: 0px;
+                }
+            }
+
+</style>
+</head>
+<body>
+<button id="toggle-sidenav" aria-label="Toggle navigation">☰</button>
+    <div id="sidenav" class="sidenav ">
+        <h2>Broadway Admin</h2><hr/>
+        <a href="{% url 'doctorss' %}"><i class="fa-solid fa-user-doctor"></i>&nbsp; Doctors</a>
+        <a href="{% url 'hospitals' %}"><i class="fa-solid fa-hospital"></i>&nbsp; Hospitals</a>
+        <a href="{% url 'specializations' %}"><i class="fa-solid fa-clinic-medical"></i>&nbsp; Departments</a>
+        <a href="{% url 'timeslots' %}"><i class="fa-solid fa-clock"></i>&nbsp; Timeslots</a>
+        <a href="{% url 'appointments' %}"><i class="fa-solid fa-calendar-check"></i>&nbsp; Appointments</a>
+        <a href="{% url 'reminders' %}"><i class="fa-solid fa-bell"></i>&nbsp; Reminders</a><hr/>
+        <a href="{% url 'adminlogin' %}"><i class="fa-solid fa-sign-out-alt"></i>&nbsp;Logout</a><hr/>
+        <button id="close-sidenav" style="background: none; border: none; color: white; font-size: 24px; cursor: pointer;" aria-label="Close navigation">✖</button>
+    </div><br/><br/>
+<div class="main-content">
+    <form id="hdiv" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div id="head" style="text-align: center; background-color: brown; color: white; padding: 10px;">Manage Hospital</div>
+        <br/>
+        <div id="hdiv1">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required>
+        </div>
+        
+        <div id="hdiv1">
+            <label for="profile_pic">Profile Picture:</label>
+            <img src="" alt="Profile Picture" id="pPic">
+            <input type="file" id="profile_pic" name="profile_pic" onchange="previewImage()"  required>
+        </div>        
+        <div id="hdiv1">
+            <label for="dept">Departments:</label>
+            <select id="dept" name="dept" required multiple>
+                <option value="" selected disabled>Select Department</option>
+                {% for d in dept %}
+                    <option value="{{ d.id }}">{{ d.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        
+        <div id="hdiv1">
+            <label for="lat">Dtistrict:</label>
+            <input type="text" id="district" name="district" required>
+        </div>
+        
+        <div id="hdiv1">
+            <label for="long">Location:</label>
+            <input type="text" id="location" name="location" required>
+        </div>
+        
+        <div id="hdiv1">
+            <label for="contact">Contact:</label>
+            <input type="tel" id="contact" name="contact" required>
+        </div>
+        
+        <div id="hdiv1">
+            <label for="web">Website:</label>
+            <input type="text" id="web" name="web" required>
+        </div>
+        
+        <div id="hdiv1">
+            <label for="hospDescri">Description:</label>
+            <textarea id="hospDescri" name="hospDescri"></textarea>
+        </div>
+        
+        <div id="hdiv2">
+            <button id="butAll" type="submit">Add</button>
+            <a id="butAll" href="{% url 'hospitals' %}">Back</a>
+        </div>
+        <div id="message">
+            {% if messages %}
+                {{ messages }}
+            {% endif %}
+        </div>
+    </form>    
+</div>
+
+<script>
+    const toggleButton = document.getElementById('toggle-sidenav');
+    const closeButton = document.getElementById('close-sidenav');
+    const sidenav = document.getElementById('sidenav');
+
+    toggleButton.addEventListener('click', () => {
+        sidenav.classList.toggle('open');
+    });
+
+    closeButton.addEventListener('click', () => {
+        sidenav.classList.remove('open');
+    });
+</script>
+    
+</body>
+</html>

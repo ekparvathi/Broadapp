@@ -1,0 +1,50 @@
+.loginbox{
+    width: 400px;
+    height: 300px;
+    text-align: center;
+    margin-left: 500px;
+    margin-top: 150px;
+    border: 2px solid black;
+
+}
+.loginbox input{
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-size: 12px;
+    margin-top: 30px;
+    width: 200px;
+    height: 30px;
+    font-family: 'Times New Roman', Times, serif;
+    border-radius: 5px;
+    font-size: medium;
+}
+#passinput{
+    margin-left: 20px;
+}
+.loginbox button{
+    background-color: rgb(76, 76, 197);
+    color: aliceblue;
+    margin-top: 40px;
+    margin-left: 5px;
+    width: 100px;
+    height: 30px;
+    border-radius: 10px;
+}
+.loginbox label{
+    font-family: 'Times New Roman', Times, serif;
+}
+h2{
+    color: white;
+}
+label{
+    color:black;
+}
+
+@media only screen and (max-width: 600px) {
+    .loginbox{
+        margin-left: 0;
+        width: 300px;
+    }
+    .loginbox input{
+        width: 100px;
+    }
+}

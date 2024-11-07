@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reminders</title>
+    <script src="https://kit.fontawesome.com/e4ecc635a0.js" crossorigin="anonymous"></script>
+
+{% load static %}
+<style>
+    body {
+        font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        font-size: small;
+        color: rgb(33, 102, 126);
+        margin: 0;
+    }
+    #hdiv {
+        width: 100%;
+        max-width: 550px;
+        border: 1px brown;
+        border-style: inset;
+        border-radius: 5px;
+        font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); 
+    }
+    #head {
+        background-color: brown;
+        padding: 10px;
+        color: white;  
+        text-align: center;  
+    }
+    #hdiv1 {
+        text-align: left;
+        align-items: flex-start;
+        font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        font-size: small;
+        display: flex;
+        margin-left: 10px;
+        color: rgb(33, 102, 126);
+    }
+    #hdiv2 {
+        display: flex;
+        justify-content: space-between;
+    }
+    #butAll {
+        padding: 5px;
+        margin-right: 5px;
+        background-color: rgb(244, 222, 222);
+        border-radius: 5px;
+        border-color: rgb(189, 79, 79);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); 
+        border-width: 1px;
+        font-size: medium;
+        color: rgb(33, 102, 126);
+    }
+    #butAll a {
+        color: rgb(33, 102, 126);
+        text-decoration: none;
+    }
+    #timeslots {
+        font-family: 'Gill Sans', 'Gill Sans MT', 'Calibri', 'Trebuchet MS', sans-serif;
+        border-collapse: collapse;
+        margin-top: 10px;
+        margin-left: auto;
+        margin-right: auto;
+        width: 100%;
+        max-width: 600px;
+        border: 2px solid rgb(168, 104, 19);
+        box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.3);  
+    }
+    #timeslots td, #timeslots th {
+        border: 1px solid #ddd;
+        padding: 10px;
+        text-align: left;
+    }
+    #timeslots th {
+        background-color: rgb(189, 79, 79);
+        color: white;
+    }
+
+    /* Sidebar and main content styles */
+    #toggle-sidenav {
+            font-size: 24px;
+            margin: 16px;
+            cursor: pointer;
+        }
+        .sidenav {
+            width: 250px;
+            height: 100vh;
+            background-color: #333;
+            color: white;
+            position: fixed;
+            left: -250px; /* Initially hidden */
+            transition: left 0.3s;
+            z-index: 1000;
+            top:0;     
+            font-size: small;  
+         }
+        .sidenav.open {
+            left: 0; /* Show the sidenav */
+        }
+        .sidenav h2 {
+            color: #fff;
+        }
+        .sidenav a {
+            color: white;
+            text-decoration: none;
+            display: block;
+            padding: 10px;
+        }
+        .sidenav a:hover {
+            background-color: #575757;
+        }
+    .main-content {
+        margin-left: 300px;
+        padding: 20px;
+    }
+    #message {
+        margin-left: 300px;
+        color: rgb(33, 102, 126);
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        #hdiv, #timeslots {
+            width: 100%;
+        }
+        .sidenav {
+            left: -250px;
+        }
+        .sidenav.open {
+            left: 0;
+        }
+        .main-content {
+            margin-left: 0px;
+            padding: 10px;
+        }
+        .table-container {
+            overflow-x: auto; /* Enable horizontal scrolling */
+            max-width: 100%; /* Full width */
+            margin-bottom: 20px; /* Space below the table */
+        }
+        #timeslots {
+            width: 100%; /* Ensure table uses full width */
+        }
+        #timeslots th, #timeslots td {
+            white-space: nowrap; /* Prevent text wrapping */
+        }
+    }
+    @media (min-width: 768px) {
+        #toggle-sidenav {
+            display: none;
+        }
+        .sidenav {
+            left: 0;
+            width: 240px;
+        }
+        .main-content{margin-left: 240px;}
+    }
+</style>
+</head>
+<body>
+    <button id="toggle-sidenav" aria-label="Toggle navigation">☰</button>
+    <div id="sidenav" class="sidenav ">
+        <h2>Broadway Admin</h2><hr/>
+        <a href="{% url 'doctorss' %}"><i class="fa-solid fa-user-doctor"></i>&nbsp; Doctors</a>
+        <a href="{% url 'hospitals' %}"><i class="fa-solid fa-hospital"></i>&nbsp; Hospitals</a>
+        <a href="{% url 'specializations' %}"><i class="fa-solid fa-clinic-medical"></i>&nbsp; Departments</a>
+        <a href="{% url 'timeslots' %}"><i class="fa-solid fa-clock"></i>&nbsp; Timeslots</a>
+        <a href="{% url 'appointments' %}"><i class="fa-solid fa-calendar-check"></i>&nbsp; Appointments</a>
+        <a href="{% url 'reminders' %}"><i class="fa-solid fa-bell"></i>&nbsp; Reminders</a><hr/>
+        <a href="{% url 'adminlogin' %}"><i class="fa-solid fa-sign-out-alt"></i>&nbsp;Logout</a><hr/>
+        <button id="close-sidenav" style="background: none; border: none; color: white; font-size: 24px; cursor: pointer;" aria-label="Close navigation">✖</button>
+    </div>
+<div class="main-content">
+    <div id="hdiv2">
+        <button id="butAll"><a href="{% url 'setReminder' %}"><b>Set Reminder</b></a></button> 
+        <button id="butAll"><a href="{% url 'doctorAdminHome' %}"><b>Back</b></a></button>
+    </div>
+    {% if reminders %}
+    <div id="timeslots">
+        <h2 style="text-align: center;">Reminders</h2>
+        <div class="table-container"> <!-- Scrollable Container -->
+            <table id="timeslots">
+                <thead>
+                    <tr>
+                        <th>Patient Name</th>
+                        <th>Title</th>
+                        <th>Message</th>
+                        <th>Remind<br/>At Token</th>
+                        <th>Remind At Time</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for remind in reminders %}
+                    <tr>
+                        <td>{{ remind.appointment }}</td>
+                        <td>{{ remind.title }}</td>
+                        <td>{{ remind.message }}</td>
+                        <td>{{ remind.reminder_token }}</td>
+                        <td>{{ remind.reminder_time }}</td> 
+                        <td>{{ remind.is_sent }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% elif messages %}
+    <div id="message">{{ messages }}</div>
+    {% elif error_message %}
+    <div class="alert alert-warning">{{ error_message }}</div>
+    {% endif %}
+</div>
+
+<script>
+    const toggleButton = document.getElementById('toggle-sidenav');
+    const closeButton = document.getElementById('close-sidenav');
+    const sidenav = document.getElementById('sidenav');
+
+    toggleButton.addEventListener('click', () => {
+        sidenav.classList.toggle('open');
+    });
+
+    closeButton.addEventListener('click', () => {
+        sidenav.classList.remove('open');
+    });
+</script>
+
+</body>
+</html>
